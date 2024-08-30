@@ -169,7 +169,7 @@ class InscritoResource extends Resource
                                 echo Pdf::loadHTML(
                                     Blade::render('pdf', ['records' => $records])
                                 )->stream();
-                            }, 'users.pdf');
+                            }, 'relatorio.pdf');
                         }),
                 ]),
             ]);

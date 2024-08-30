@@ -1,3 +1,33 @@
+<style>
+    /* Estilos CSS para formatação */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 0.5px solid gray;
+        padding: 3px;
+        font-size: 11px; /* Fonte menor para melhor visualização */
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        text-align: left;
+    }
+
+    .data {
+        font-size: 9px;
+    }
+</style>
+
+<p> e-Ticket :: Relatório de Inscrições
+    <br>
+    <strong>Encontro de Jovens</strong> | Presbitério Catarinense
+</p>
+<p class="data">{{ date("d/m/Y H:m:s") }}</p>
+
 <table>
     <thead>
         <tr>
@@ -5,7 +35,7 @@
             <th>Nome</th>
             <!-- <th>Endereço</th> -->
             <!-- <th>Nascimento</th> -->
-            <!-- <th>Celular</th> -->
+            <th>Celular</th>
             <!-- <th>Sexo</th> -->
             <!-- <th>Batizado</th> -->
             <th>Igreja</th>
@@ -23,7 +53,7 @@
                 <!-- <td>{{ $record->data_nascimento }}</td> -->
                 <!-- <td>{{ $record->sexo }}</td> -->
                 <!-- <td>{{ $record->endereco }}</td> -->
-                <!-- <td>{{ $record->celular }}</td> -->
+                <td>{{ $record->celular }}</td>
                 <!-- <td>{{ $record->batizado }}</td> -->
                 <td>{{ $record->igreja }}</td>
                 <td>{{ $record->tipo_pagamento }}</td>
