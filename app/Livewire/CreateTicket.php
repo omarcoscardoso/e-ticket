@@ -69,6 +69,7 @@ class CreateTicket extends Component implements HasForms
                     'PALHOÇA' => 'PALHOÇA',
                     'PALHOÇA AQUARIOS' => 'PALHOÇA AQUARIOS',
                     'PASSO FUNDO' => 'PASSO FUNDO',
+                    'PICARRAS' => 'PIÇARRAS',
                     'PORTO ALEGRE' => 'PORTO ALEGRE',
                     'SANTO ÂNGELO' => 'SANTO ÂNGELO',
                     'SÃO FRANCISCO DO SUL' => 'SÃO FRANCISCO DO SUL',
