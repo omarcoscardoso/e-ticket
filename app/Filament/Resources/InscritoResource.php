@@ -80,10 +80,16 @@ class InscritoResource extends Resource
                 Forms\Components\Textarea::make('observacao')
                     ->columnSpanFull(),
                 Forms\Components\Select::make('tipo_pagamento')
-                    // ->required()
+                    ->required()
                     ->options([
                         'pix' => 'PIX',
                         'cartao_credito' => 'CARTÃO DE CRÉDITO'
+                    ]),
+                Forms\Components\Select::make('situacao_pamento')
+                    ->required()
+                    ->options([
+                        'pago' => 'PAGO',
+                        'aberto' => 'ABERTO'
                     ]),
             ])->columns(4);
     }
@@ -121,7 +127,7 @@ class InscritoResource extends Resource
                 Tables\Columns\TextColumn::make('situacao_pagamento')
                     ->label('Situação')
                     ->searchable()
-                    ->sortable(),       
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('observacao')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),    

@@ -21,6 +21,8 @@ class Inscrito extends Model
         'celular',
         'batizado',
         'igreja',
+        'tipo_pagamento',
+        'situacao_pagamento',
         'observacao',
     ];
 }
