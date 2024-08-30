@@ -100,7 +100,8 @@ class InscritoResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id_inscrito')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('nome')
                     ->searchable()
                     ->sortable(),
@@ -109,7 +110,8 @@ class InscritoResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('data_nascimento')
                     ->date('d/m/Y')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('celular')
                     ->searchable(),   
                 Tables\Columns\TextColumn::make('sexo')
