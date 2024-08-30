@@ -10,7 +10,7 @@ use Filament\Forms\Form;
 class ViewPix extends Component implements HasForms
 {
     public $pixCode = '00020126330014BR.GOV.BCB.PIX0111097449499295204000053039865406160.005802BR5923Presbiterio Catarinense6014Santa Catarina62210517PGRETIROJOVEM20246304DB26';
-
+    
     use InteractsWithForms;
 
     public ?array $data = [];

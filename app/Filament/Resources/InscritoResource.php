@@ -38,16 +38,14 @@ class InscritoResource extends Resource
                     ->required()
                     ->tel()
                     ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
-                Forms\Components\Radio::make('sexo')
+                Forms\Components\Select::make('sexo')
                     ->required()
-                    // ->inline()
                     ->options([
-                        'masculiNo' => 'Masculino',
+                        'masculino' => 'Masculino',
                         'feminino' => 'Feminino'
                     ]),
-                Forms\Components\Radio::make('batizado')
+                Forms\Components\Select::make('batizado')
                     ->required()
-                    // ->inline()
                     ->boolean(),
                 Forms\Components\Select::make('igreja')
                     ->required()
@@ -69,6 +67,7 @@ class InscritoResource extends Resource
                         'PALHOÇA' => 'PALHOÇA',
                         'PALHOÇA AQUARIOS' => 'PALHOÇA AQUARIOS',
                         'PASSO FUNDO' => 'PASSO FUNDO',
+                        'PICARRAS' => 'PIÇARRAS',
                         'PORTO ALEGRE' => 'PORTO ALEGRE',
                         'SANTO ÂNGELO' => 'SANTO ÂNGELO',
                         'SÃO FRANCISCO DO SUL' => 'SÃO FRANCISCO DO SUL',
@@ -85,12 +84,13 @@ class InscritoResource extends Resource
                         'pix' => 'PIX',
                         'cartao_credito' => 'CARTÃO DE CRÉDITO'
                     ]),
-                Forms\Components\Select::make('situacao_pamento')
+                Forms\Components\Select::make('situacao_pagamento')
                     ->required()
-                    ->options([
+                    ->options(
+                        [
                         'pago' => 'PAGO',
                         'aberto' => 'ABERTO'
-                    ]),
+                    ])
             ])->columns(4);
     }
 
@@ -115,8 +115,9 @@ class InscritoResource extends Resource
                 Tables\Columns\TextColumn::make('sexo')
                     ->searchable()
                     ->sortable(),               
-                Tables\Columns\TextColumn::make('batizado')
+                Tables\Columns\IconColumn::make('batizado')
                     ->searchable()
+                    ->boolean()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('igreja')
                     ->searchable()
@@ -125,7 +126,12 @@ class InscritoResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('situacao_pagamento')
-                    ->label('Situação')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'pago' => 'success',
+                        'aberto' => 'warning',
+                    })
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('observacao')

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\InscritoResource\Pages;
 use App\Filament\Resources\InscritoResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Database\Eloquent\Model;
 
 class EditInscrito extends EditRecord
 {
@@ -15,6 +16,14 @@ class EditInscrito extends EditRecord
         return [
             Actions\DeleteAction::make(),
         ];
+    }
+
+    protected function handleRecordUpdate(Model $record, array $data): Model
+    {
+        // dd($data);
+        $record->update($data);
+    
+        return $record;
     }
 
     protected function getRedirectUrl(): string
