@@ -65,6 +65,7 @@ class CreateTicket extends Component implements HasForms
                     'GOVERNADOR CELSO RAMOS' => 'GOVERNADOR CELSO RAMOS',
                     'IPIRANGA' => 'IPIRANGA',
                     'ITAJAÍ' => 'ITAJAÍ',
+                    'ITAPEMA' => 'ITAPEMA',
                     'IRIRIU' => 'IRIRIU',
                     'LAGES' => 'LAGES',
                     'MONTE CARLO' => 'MONTE CARLO',
