@@ -134,12 +134,16 @@ class InscritoResource extends Resource
                 Tables\Columns\TextColumn::make('tipo_pagamento')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('situacao_pagamento')
+                Tables\Columns\SelectColumn::make('situacao_pagamento')
                     ->label('Status')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'pago' => 'success',
-                        'aberto' => 'warning',
+                    ->options([
+                        'aberto' => 'Aberto',
+                        'pago' => 'Pago',
+                    ])
+                    ->default('Aberto') // Define o valor padrão se necessário.
+                    ->disablePlaceholderSelection() // Se você não quiser um valor de placeholder.
+                    ->afterStateUpdated(function ($record, $state) {
+                        // Qualquer lógica adicional após o estado ser atualizado.
                     })
                     ->searchable()
                     ->sortable(),
