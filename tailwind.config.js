@@ -6,5 +6,6 @@ export default {
         './app/Filament/**/*.php',
         './resources/views/**/*.blade.php',
         './vendor/filament/**/*.blade.php',
+        './vendor/lara-zeus/accordion/resources/views/**/*.blade.php',
     ],
 }
