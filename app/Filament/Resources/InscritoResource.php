@@ -3,17 +3,15 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\InscritoResource\Pages;
-use App\Filament\Resources\InscritoResource\RelationManagers;
 use App\Models\Inscrito;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\Fieldset;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 
@@ -57,6 +55,7 @@ class InscritoResource extends Resource
                         'AVENTUREIRO' => 'AVENTUREIRO',
                         '1a BIGUAÇU' => '1a BIGUAÇU',
                         '2a BIGUAÇU' => '2a BIGUAÇU',
+                        'BARREIROS' => 'BARREIROS',
                         'BOMBINHAS' => 'BOMBINHAS',
                         'BLUMENAU' => 'BLUMENAU',
                         'CURITIBANOS' => 'CURITIBANOS',
@@ -141,9 +140,20 @@ class InscritoResource extends Resource
                         'pago' => 'Pago',
                     ])
                     ->default('Aberto') // Define o valor padrão se necessário.
-                    ->disablePlaceholderSelection() // Se você não quiser um valor de placeholder.
+                    ->disablePlaceholderSelection()
+                    ->disabled(function ($record) {
+                        // Desabilita o select se o status for 'pago'
+                        return $record->situacao_pagamento === 'pago';
+                    })
                     ->afterStateUpdated(function ($record, $state) {
                         // Qualquer lógica adicional após o estado ser atualizado.
+                    })
+                    ->extraAttributes(function ($record) {
+                        return [
+                            'class' => $record->situacao_pagamento === 'pago' 
+                                ? 'bg-gray-100' 
+                                : 'bg-green-500',
+                        ];
                     })
                     ->searchable()
                     ->sortable(),
@@ -156,7 +166,26 @@ class InscritoResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\Filter::make('observacao')
+                    ->label("InChurch")
+                    ->query(fn (Builder $query): Builder => $query->where('observacao', '=', "inchurch")),
+                Tables\Filters\Filter::make('situacao_pagamento')
+                    ->form([
+                        Checkbox::make('pago'),
+                        Checkbox::make('aberto'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['pago'],
+                                fn (Builder $query): Builder => $query->where('situacao_pagamento', '=', 'pago')
+                            )
+                            ->when(
+                                $data['aberto'],
+                                fn (Builder $query): Builder => $query->where('situacao_pagamento', '=', "aberto")
+                                            ->orWhere('situacao_pagamento', '=', null),
+                            );
+                    })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

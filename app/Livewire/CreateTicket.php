@@ -56,6 +56,7 @@ class CreateTicket extends Component implements HasForms
                     'AVENTUREIRO' => 'AVENTUREIRO',
                     '1a BIGUAÇU' => '1a BIGUAÇU',
                     '2a BIGUAÇU' => '2a BIGUAÇU',
+                    'BARREIROS' => 'BARREIROS',
                     'BOMBINHAS' => 'BOMBINHAS',
                     'BLUMENAU' => 'BLUMENAU',
                     'CURITIBANOS' => 'CURITIBANOS',
