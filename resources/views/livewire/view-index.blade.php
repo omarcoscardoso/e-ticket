@@ -1,7 +1,7 @@
 <div class="flex flex-col items-center justify-center min-h-screen bg-gray-400">
     <div class="bg-white p-3 rounded-2xl shadow-md max-w-2xl">
         <video class="w-full aspect-video rounded-2xl h-auto mb-7" controls>
-            <source src="https://renovada.app.br/transformados/filme_jovens1.mp4" type="video/mp4">
+            <source src="https://renovada.app.br/filme_jovens1.mp4" type="video/mp4">
             Seu navegador não suporta a reprodução de vídeo.
         </video>
         <h1 class="text-2xl font-bold text-center">Encontro de Jovens da Igreja Presbiteriana Renovada</h1>
