@@ -7,12 +7,14 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Notifications\Actions\Action;
+use Filament\Notifications\Notification;
+use GrahamCampbell\ResultType\Success;
 use Livewire\Component;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-
 
 class CreateTicket extends Component implements HasForms
 {
@@ -40,14 +42,12 @@ class CreateTicket extends Component implements HasForms
                 ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
             Radio::make('sexo')
                 ->required()
-                // ->inline()
                 ->options([
-                    'masculiNo' => 'Masculino',
+                    'masculino' => 'Masculino',
                     'feminino' => 'Feminino'
                 ]),
             Radio::make('batizado')
                 ->required()
-                // ->inline()
                 ->boolean(),
             Select::make('igreja')
                 ->required()
@@ -98,13 +98,42 @@ class CreateTicket extends Component implements HasForms
     public function create(): void
     {
         $stateData = $this->form->getState();
-        Inscrito::create($this->form->getState());
-        if ($stateData['tipo_pagamento']=='pix') {
-            redirect('pix');
-        } else {
-            redirect('https://mpago.la/1UweKHr');    
-        } 
-        $this->mount();
+        $dados = Inscrito::query()
+                            ->where('nome', '=', $stateData['nome'])
+                            ->orWhere('celular', '=', $stateData['celular'])->first();
+        switch ($dados) {
+            case null:
+                Inscrito::create($this->form->getState());
+                switch ($stateData['tipo_pagamento']) {
+                    case 'pix':
+                        redirect('pix');
+                        break;
+                    default:
+                        redirect('https://mpago.la/1UweKHr');
+                        break;
+                }
+                $this->mount();
+                break;
+            default:
+                Notification::make()
+                    ->title('NOME ou CELULAR já cadastrados')
+                    ->warning()
+                    ->color('warning')
+                    ->persistent()
+                    ->body('Se você ainda não fez o PAGAMENTO escolha uma opção abaixo.')
+                    ->actions([
+                        Action::make('PIX')
+                            ->button()
+                            ->color('success')
+                            ->url('pix'),
+                        Action::make('CREDITO')
+                            ->button()
+                            ->color('info')
+                            ->url('https://mpago.la/1UweKHr'),
+                    ])
+                    ->send();
+                break;
+        }
     }
     
     public function mount(): void

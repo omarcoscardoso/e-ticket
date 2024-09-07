@@ -8,6 +8,7 @@
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.0",
         "filament/filament": "^3.2",
+        "filament/notifications": "^3.2",
         "filament/widgets": "^3.2",
         "lara-zeus/accordion": "^1.1",
         "laravel/framework": "^11.9",
