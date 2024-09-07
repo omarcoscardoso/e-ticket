@@ -192,11 +192,6 @@ class InscritoResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\BulkAction::make('Export')
                         ->icon('heroicon-m-arrow-down-tray')
                         ->openUrlInNewTab()
@@ -208,6 +203,7 @@ class InscritoResource extends Resource
                                 )->stream();
                             }, 'relatorio.pdf');
                         }),
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
