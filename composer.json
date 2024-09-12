@@ -10,6 +10,7 @@
         "filament/filament": "^3.2",
         "filament/notifications": "^3.2",
         "filament/widgets": "^3.2",
+        "flowframe/laravel-trend": "^0.2.0",
         "lara-zeus/accordion": "^1.1",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
