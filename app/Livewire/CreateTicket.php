@@ -99,8 +99,8 @@ class CreateTicket extends Component implements HasForms
     {
         $stateData = $this->form->getState();
         $dados = Inscrito::query()
-                            ->where('nome', '=', $stateData['nome'])
-                            ->orWhere('celular', '=', $stateData['celular'])->first();
+                    ->where('nome', '=', $stateData['nome'])
+                    ->Where('celular', '=', $stateData['celular'])->first();
         switch ($dados) {
             case null:
                 Inscrito::create($this->form->getState());
