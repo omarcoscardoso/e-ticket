@@ -15,6 +15,7 @@ class InscritosIgrejaChart extends ChartWidget
     {
         $data = Inscrito::select('igreja', DB::raw('count(*) as count'))
         ->groupBy('igreja')
+        ->orderBy('igreja')
         ->pluck('count', 'igreja')
         ->toArray();
 
