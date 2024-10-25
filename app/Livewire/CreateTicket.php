@@ -3,18 +3,24 @@
 namespace App\Livewire;
 
 use App\Models\Inscrito;
+use App\Models\Ingresso;
+use App\Models\Evento;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
+use Filament\Forms\Get;
 use GrahamCampbell\ResultType\Success;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Leandrocfe\FilamentPtbrFormFields\PhoneNumber;
 
 class CreateTicket extends Component implements HasForms
 {
@@ -26,6 +32,12 @@ class CreateTicket extends Component implements HasForms
     {
         return $form
         ->schema([
+            Select::make('evento_id')
+                ->label('Evento')
+                ->relationship('evento','nome_evento')
+                ->preload()
+                ->live()
+                ->required(),
             TextInput::make('nome')
                 ->required()
                 ->columnSpanFull()
@@ -36,10 +48,8 @@ class CreateTicket extends Component implements HasForms
             DatePicker::make('data_nascimento')
                 ->required()
                 ->label('Data de Nascimento'),
-            TextInput::make('celular')
-                ->required()
-                ->tel()
-                ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
+            PhoneNumber::make('celular')
+                ->mask('(99) 99999-9999'),
             Radio::make('sexo')
                 ->required()
                 ->options([

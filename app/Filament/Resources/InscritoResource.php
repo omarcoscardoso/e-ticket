@@ -3,17 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\InscritoResource\Pages;
+use App\Models\Ingresso;
 use App\Models\Inscrito;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
+use Leandrocfe\FilamentPtbrFormFields\PhoneNumber;
 
 class InscritoResource extends Resource
 {
@@ -25,20 +28,28 @@ class InscritoResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('evento_id')
+                    ->label('Evento')
+                    ->relationship('evento','nome_evento')
+                    ->preload()
+                    ->live()
+                    ->required(),
+                Forms\Components\Select::make('ingresso_id')
+                    ->options(fn(Get $get): Collection => Ingresso::query()
+                        ->where('evento_id', $get('evento_id'))
+                        ->where('ativo', '=', true)
+                        ->pluck('nome', 'id'))
+                    ->preload()
+                    ->required(),
                 Forms\Components\TextInput::make('nome')
                     ->required()
-                    ->columnSpanFull()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('endereco')
                     ->columnSpanFull()
                     ->maxLength(255),
                 Forms\Components\DatePicker::make('data_nascimento')
                     ->required()
                     ->label('Data de Nascimento'),
-                Forms\Components\TextInput::make('celular')
-                    ->required()
-                    ->tel()
-                    ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
+                PhoneNumber::make('celular')
+                    ->mask('(99) 99999-9999'),
                 Forms\Components\Select::make('sexo')
                     ->required()
                     ->options([
@@ -47,43 +58,22 @@ class InscritoResource extends Resource
                     ]),
                 Forms\Components\Select::make('batizado')
                     ->required()
-                    ->boolean(),
-                Forms\Components\Select::make('igreja')
-                    ->required()
-                    ->options([
-                        'ARARANGUÁ' => 'ARARANGUÁ',
-                        'AVENTUREIRO' => 'AVENTUREIRO',
-                        '1a BIGUAÇU' => '1a BIGUAÇU',
-                        '2a BIGUAÇU' => '2a BIGUAÇU',
-                        'BARREIROS' => 'BARREIROS',
-                        'BOMBINHAS' => 'BOMBINHAS',
-                        'BLUMENAU' => 'BLUMENAU',
-                        'CURITIBANOS' => 'CURITIBANOS',
-                        'ESTREITO' => 'ESTREITO',
-                        '1a JOINVILLE' => '1a JOINVILLE',
-                        '2a JOINVILLE' => '2a JOINVILLE',
-                        'GOVERNADOR CELSO RAMOS' => 'GOVERNADOR CELSO RAMOS',
-                        'IPIRANGA' => 'IPIRANGA',
-                        'ITAJAÍ' => 'ITAJAÍ',
-                        'ITAPEMA' => 'ITAPEMA',
-                        'IRIRIU' => 'IRIRIU',
-                        'LAGES' => 'LAGES',
-                        'MONTE CARLO' => 'MONTE CARLO',
-                        'NAVEGANTES' => 'NAVEGANTES',
-                        'PALHOÇA' => 'PALHOÇA',
-                        'PALHOÇA AQUARIOS' => 'PALHOÇA AQUARIOS',
-                        'PASSO FUNDO' => 'PASSO FUNDO',
-                        'PICARRAS' => 'PIÇARRAS',
-                        'PORTO ALEGRE' => 'PORTO ALEGRE',
-                        'SANTO ÂNGELO' => 'SANTO ÂNGELO',
-                        'SÃO FRANCISCO DO SUL' => 'SÃO FRANCISCO DO SUL',
-                        'SÃO JOSÉ' => 'SÃO JOSÉ',
-                        'VIAMÃO' => 'VIAMÃO',
-                        'VIDEIRA' => 'VIDEIRA',
-                    ])
-                    ->native(false),
-                Forms\Components\Textarea::make('observacao')
-                    ->columnSpanFull(),
+                    ->boolean(),      
+                Forms\Components\Select::make('igreja_id')
+                    ->label('Igreja')
+                    ->relationship(
+                        name: 'igreja',
+                        titleAttribute: 'nome',
+                        modifyQueryUsing: 
+                            fn (Builder $query)=> $query
+                                ->where('ativo','=',true)
+                                ->orderBy('nome')
+                                
+                                )
+                    ->preload()
+                    ->required(),
+                // Forms\Components\Textarea::make('observacao')
+                //     ->columnSpanFull(),
                 Forms\Components\Select::make('tipo_pagamento')
                     ->required()
                     ->options([
@@ -104,7 +94,17 @@ class InscritoResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id_inscrito')
+                Tables\Columns\TextColumn::make('evento.nome_evento')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('ingresso.nome')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('ingresso.custo')
+                    ->label('Valor')
+                    ->prefix('R$ ')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('id')
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -127,7 +127,7 @@ class InscritoResource extends Resource
                     ->searchable()
                     ->boolean()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('igreja')
+                Tables\Columns\TextColumn::make('igreja.nome')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tipo_pagamento')
@@ -166,9 +166,9 @@ class InscritoResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\Filter::make('observacao')
-                    ->label("InChurch")
-                    ->query(fn (Builder $query): Builder => $query->where('observacao', '=', "inchurch")),
+                // Tables\Filters\Filter::make('observacao')
+                //     ->label("InChurch")
+                //     ->query(fn (Builder $query): Builder => $query->where('observacao', '=', "inchurch")),
                 Tables\Filters\Filter::make('situacao_pagamento')
                     ->form([
                         Checkbox::make('pago'),

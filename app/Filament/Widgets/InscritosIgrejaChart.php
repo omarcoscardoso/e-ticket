@@ -22,12 +22,13 @@ class InscritosIgrejaChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Inscritos',
+                    'label' => 'Inscrito',
                     'data' => array_values($data)
                 ]
             ],
             'labels' => array_keys($data),
         ];
+        
 
     }
 

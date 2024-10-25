@@ -30,12 +30,7 @@ class EventoResource extends Resource
         ->schema([
             Forms\Components\TextInput::make('nome_evento')
                     ->required()
-                    ->maxLength(255)
-                    ->columnSpan([
-                        'sm' => 2,
-                        'xl' => 3,
-                        '2xl' => 2,
-                    ]),
+                    ->maxLength(255),
                 Forms\Components\DatePicker::make('data_ini')
                     ->required()
                     ->label('Data Início'),
@@ -45,14 +40,14 @@ class EventoResource extends Resource
                 Forms\Components\Textarea::make('observacao')
                     ->required()
                     ->columnSpanFull(),
-                ]);
+                ])->columns(3);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id_evento')
+                Tables\Columns\TextColumn::make('id')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nome_evento')
                     ->searchable(),

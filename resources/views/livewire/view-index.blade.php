@@ -1,27 +1,28 @@
 <div class="flex flex-col items-center justify-center min-h-screen bg-gray-400">
     <div class="bg-white p-3 rounded-2xl shadow-md max-w-2xl">
         <video class="w-full aspect-video rounded-2xl h-auto mb-7" controls>
-            <source src="https://renovada.app.br/filme_jovens1.mp4" type="video/mp4">
+            <source src="renovada.app.br/retiro_verao_2025.mp4" type="video/mp4">
             Seu navegador não suporta a reprodução de vídeo.
         </video>
-        <h1 class="text-2xl font-bold text-center">Encontro de Jovens da Igreja Presbiteriana Renovada</h1>
-        <h1 class="text-2xl font-bold text-center">De 13 a 15 de setembro</h1>
+        <h1 class="text-2xl font-bold text-center">Retiro de Verão</h1>
+        <h1 class="text-2xl font-bold text-center">De 24 a 26 de Janeiro</h1>
         <p class="text-center">Prepare-se para um fim de semana de transformação e crescimento espiritual.</p>
-        <br>    
+        <br>
         <div class="text-center"> 
-            <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-md">
-                Estrada do Saltinho, 354-526<br>
-                CEPROVI, Campo Alegre/SC
+            <button type="button" class="bg-blue-500 text-white px-3 py-1 rounded-md">
+                Doutor Artur José Soares, 3920<br>
+                Morungava - Gravataí/RS<br>
+                Sítio Ebenézer Sul
             </button>
         <script>
             const button = document.querySelector('button');
             button.addEventListener('click', () => {
-                window.open('https://maps.app.goo.gl/FBdjKUbMb2KFcMCm6', '_blank');
+                window.open('https://maps.app.goo.gl/TA3Y8TVNV6r1gne7A', '_blank');
             });
         </script>
         </div>
         <br>
-        <p class="text-center">Junte-se a nós no Espaço Ceprovi para momentos de louvor, estudo da Palavra, e conexão com outros jovens!</p>
+        <p class="text-center">Junte-se a nós para momentos de louvor, estudo da Palavra, e conexão com Deus e com o próximo!</p>
         <br>
         <form wire:submit="submit">
             {{ $this->form }}
@@ -30,7 +31,7 @@
             </div>
         </form>
         <div class="mt-4 text-sm text-gray-500 text-center">
-            ©2024 Igreja Presbiteriana Renovada<br>
+            ©2024 Igreja Presbiteriana Renovada de Viamão<br>
             Presbitério Catarinense
         </div>
     </div>

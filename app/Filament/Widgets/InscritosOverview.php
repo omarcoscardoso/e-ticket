@@ -13,7 +13,7 @@ class InscritosOverview extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Inscritos', Inscrito::query()->count())
+            Stat::make('Inscrito', Inscrito::query()->count())
                 ->description('Jovens inscritos')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->chart([7, 2, 10, 3, 15, 4, 17])

@@ -12,14 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('inscritos', function (Blueprint $table) {
-            $table->id('id_inscrito');
+            $table->id('id');
+            $table->foreignId('evento_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('ingresso_id')->constrained()->cascadeOnDelete();
             $table->string('nome');
             $table->date('data_nascimento');
             $table->enum('sexo', ['masculino', 'feminino']);
             $table->string('endereco')->nullable();
             $table->string('celular');
             $table->boolean('batizado');
-            $table->string('igreja')->nullable();
+            $table->foreignId('igreja_id')->constrained()->cascadeOnDelete();
             $table->text('observacao')->nullable();
             $table->enum('tipo_pagamento', ['pix', 'cartao_credito']);
             $table->enum('situacao_pagamento', ['pago', 'aberto'])->nullable();
