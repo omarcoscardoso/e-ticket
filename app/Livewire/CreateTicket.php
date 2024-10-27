@@ -11,6 +11,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
+use Filament\Forms\Form;
 use Filament\Forms\Get;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,7 +20,6 @@ use Livewire\Component;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Leandrocfe\FilamentPtbrFormFields\PhoneNumber;
 
 class CreateTicket extends Component implements HasForms
@@ -37,72 +37,59 @@ class CreateTicket extends Component implements HasForms
                 ->relationship('evento','nome_evento')
                 ->preload()
                 ->live()
+                ->default(1)
+                ->disabled()
+                ->required(),
+            Select::make('ingresso_id')
+                ->label('Escolha um Ingresso')
+                ->options(fn(Get $get): Collection => Ingresso::query()
+                    ->where('evento_id', $get('evento_id'))
+                    ->where('ativo', '=', true)
+                    ->pluck('nome', 'id'))
+                ->preload()
                 ->required(),
             TextInput::make('nome')
                 ->required()
-                ->columnSpanFull()
-                ->maxLength(255),
-            TextInput::make('endereco')
-                ->columnSpanFull()
+                ->columnSpan(3)
                 ->maxLength(255),
             DatePicker::make('data_nascimento')
-                ->required()
-                ->label('Data de Nascimento'),
+                ->label('Data de Nascimento')
+                ->required(),
             PhoneNumber::make('celular')
                 ->mask('(99) 99999-9999'),
-            Radio::make('sexo')
+            Select::make('sexo')
                 ->required()
                 ->options([
                     'masculino' => 'Masculino',
                     'feminino' => 'Feminino'
                 ]),
-            Radio::make('batizado')
+            Select::make('batizado')
                 ->required()
-                ->boolean(),
-            Select::make('igreja')
-                ->required()
-                ->options([
-                    'ARARANGUÁ' => 'ARARANGUÁ',
-                    'AVENTUREIRO' => 'AVENTUREIRO',
-                    '1a BIGUAÇU' => '1a BIGUAÇU',
-                    '2a BIGUAÇU' => '2a BIGUAÇU',
-                    'BARREIROS' => 'BARREIROS',
-                    'BOMBINHAS' => 'BOMBINHAS',
-                    'BLUMENAU' => 'BLUMENAU',
-                    'CURITIBANOS' => 'CURITIBANOS',
-                    'ESTREITO' => 'ESTREITO',
-                    '1a JOINVILLE' => '1a JOINVILLE',
-                    '2a JOINVILLE' => '2a JOINVILLE',
-                    'GOVERNADOR CELSO RAMOS' => 'GOVERNADOR CELSO RAMOS',
-                    'IPIRANGA' => 'IPIRANGA',
-                    'ITAJAÍ' => 'ITAJAÍ',
-                    'ITAPEMA' => 'ITAPEMA',
-                    'IRIRIU' => 'IRIRIU',
-                    'LAGES' => 'LAGES',
-                    'MONTE CARLO' => 'MONTE CARLO',
-                    'NAVEGANTES' => 'NAVEGANTES',
-                    'PALHOÇA' => 'PALHOÇA',
-                    'PALHOÇA AQUARIOS' => 'PALHOÇA AQUARIOS',
-                    'PASSO FUNDO' => 'PASSO FUNDO',
-                    'PICARRAS' => 'PIÇARRAS',
-                    'PORTO ALEGRE' => 'PORTO ALEGRE',
-                    'SANTO ÂNGELO' => 'SANTO ÂNGELO',
-                    'SÃO FRANCISCO DO SUL' => 'SÃO FRANCISCO DO SUL',
-                    'SÃO JOSÉ' => 'SÃO JOSÉ',
-                    'VIAMÃO' => 'VIAMÃO',
-                    'VIDEIRA' => 'VIDEIRA',
-                ])
-                ->native(false),
-            Textarea::make('observacao')
-                ->columnSpanFull(),
+                ->boolean(),      
+            Select::make('igreja_id')
+                ->label('Igreja')
+                ->relationship(
+                    name: 'igreja',
+                    titleAttribute: 'nome',
+                    modifyQueryUsing: 
+                        fn (Builder $query)=> $query
+                            ->where('ativo','=',true)
+                            ->orderBy('nome')
+                            
+                )
+                ->default(1)
+                ->disabled()
+                ->required(),
             Select::make('tipo_pagamento')
                 ->required()
                 ->options([
                     'pix' => 'PIX',
                     'cartao_credito' => 'CARTÃO DE CRÉDITO'
-                ]),    
-        ])->columns(4)
-          ->statePath('data');
+                ]),
+        ])
+        ->columns(4)
+        ->statePath('data')
+        ->model(Inscrito::class) ;
     }
 
     public function create(): void
