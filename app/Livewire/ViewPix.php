@@ -2,24 +2,29 @@
 
 namespace App\Livewire;
 
+use App\Models\Evento;
 use Livewire\Component;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
+use Livewire\Features\SupportTesting\Render;
 
 class ViewPix extends Component implements HasForms
 {
-    public $pixCode = '00020126330014BR.GOV.BCB.PIX0111097449499295204000053039865406160.005802BR5923Presbiterio Catarinense6014Santa Catarina62210517PGRETIROJOVEM20246304DB26';
-    
     use InteractsWithForms;
 
     public ?array $data = [];
-
+    
+    public function mount()
+    {
+        // Carrega $qrcode da sessão e armazena em $data para uso na view
+        $this->data['qrcode'] = session('qrcode');
+    }
     public function form(Form $form): Form
     {
         return $form
-        ->schema([  
-        ])->statePath('data');
+        ->schema([
+            ])->statePath('data');
     }
     
     public function voltar(): void

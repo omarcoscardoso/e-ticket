@@ -16,8 +16,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class IgrejaResource extends Resource
 {
     protected static ?string $model = Igreja::class;
+    protected static ?string $navigationGroup = 'Configuração';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'bx-church';
 
     public static function form(Form $form): Form
     {

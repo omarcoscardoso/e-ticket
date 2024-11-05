@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\HomePixController;
 use App\Livewire\CreateTicket;
 use App\Livewire\ListTickets;
 use App\Livewire\ViewIndex;
@@ -18,8 +19,4 @@ Route::get('/ticket', CreateTicket::class);
 
 Route::get('/lista', ListTickets::class);
 
-Route::get('/pix', ViewPix::class);
-
-// Route::get('/pix', function () {
-//     return view('pix');
-// });
+Route::get('/pix', ViewPix::class)->name('pix');

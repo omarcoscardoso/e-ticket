@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\InscritoResource\Pages;
 use App\Models\Ingresso;
 use App\Models\Inscrito;
+use App\Models\Pagamento;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
@@ -17,12 +18,15 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Leandrocfe\FilamentPtbrFormFields\PhoneNumber;
+use Leandrocfe\FilamentPtbrFormFields\Document;
+use Illuminate\Support\Facades\Http;
 
 class InscritoResource extends Resource
 {
     protected static ?string $model = Inscrito::class;
+    protected static ?string $navigationGroup = 'Controle de Inscrições';
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'bx-group';
 
     public static function form(Form $form): Form
     {
@@ -50,6 +54,8 @@ class InscritoResource extends Resource
                     ->label('Data de Nascimento'),
                 PhoneNumber::make('celular')
                     ->mask('(99) 99999-9999'),
+                Document::make('cpf')
+                    ->cpf(),
                 Forms\Components\Select::make('sexo')
                     ->required()
                     ->options([
@@ -72,20 +78,33 @@ class InscritoResource extends Resource
                                 )
                     ->preload()
                     ->required(),
-                // Forms\Components\Textarea::make('observacao')
-                //     ->columnSpanFull(),
+                Forms\Components\Select::make('tamanho_camiseta')
+                    ->required()
+                    ->options([
+                        'PP' => 'PP',
+                        'P' => 'P',
+                        'M' => 'M',
+                        'G' => 'G',
+                        'GG' => 'GG',
+                        'XG' => 'XG',
+                    ])
+                    ->placeholder('Selecione o tamanho'),
                 Forms\Components\Select::make('tipo_pagamento')
                     ->required()
                     ->options([
                         'pix' => 'PIX',
-                        'cartao_credito' => 'CARTÃO DE CRÉDITO'
+                        'cartao_credito' => 'CARTÃO DE CRÉDITO',
+                        'isento' => 'Isento'
                     ]),
-                Forms\Components\Select::make('situacao_pagamento')
-                    ->required()
-                    ->options(
-                        [
-                        'pago' => 'PAGO',
-                        'aberto' => 'ABERTO'
+                Forms\Components\Select::make('pagamento.status')
+                    ->label('Status Pagamento')    
+                    ->options([
+                            'PAID' => 'Pago',
+                            'IN_ANALYSIS' => 'Em Análise',
+                            'DECLINED' => 'Recusado',
+                            'CANCELED' => 'Cancelado',
+                            'WAITING' => 'Aguardando',
+                            'FREE' => 'Isento',                        
                     ])
             ])->columns(4);
     }
@@ -94,6 +113,10 @@ class InscritoResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('evento.nome_evento')
                     ->searchable()
                     ->sortable(),
@@ -104,11 +127,10 @@ class InscritoResource extends Resource
                     ->label('Valor')
                     ->prefix('R$ ')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('id')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('nome')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('cpf')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('endereco')
@@ -129,34 +151,41 @@ class InscritoResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('igreja.nome')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('tipo_pagamento')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\SelectColumn::make('situacao_pagamento')
-                    ->label('Status')
-                    ->options([
-                        'aberto' => 'Aberto',
-                        'pago' => 'Pago',
-                    ])
-                    ->default('Aberto') // Define o valor padrão se necessário.
-                    ->disablePlaceholderSelection()
-                    ->disabled(function ($record) {
-                        // Desabilita o select se o status for 'pago'
-                        return $record->situacao_pagamento === 'pago';
-                    })
-                    ->afterStateUpdated(function ($record, $state) {
-                        // Qualquer lógica adicional após o estado ser atualizado.
-                    })
-                    ->extraAttributes(function ($record) {
-                        return [
-                            'class' => $record->situacao_pagamento === 'pago' 
-                                ? 'bg-gray-100' 
-                                : 'bg-green-500',
-                        ];
-                    })
+                Tables\Columns\TextColumn::make('tamanho_camiseta')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\BadgeColumn::make('pagamento.status')
+                    ->label('Status')    
+                    ->colors([
+                        'success' => 'PAID', 
+                        'info' => 'IN_ANALYSIS', 
+                        'gray' => 'DECLINED', 
+                        'danger' => 'CANCELED', 
+                        'warning' => 'WAITING',
+                        'primary' => 'FREE',
+                    ])
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            'PAID' => 'Pago',
+                            'IN_ANALYSIS' => 'Em Análise',
+                            'DECLINED' => 'Recusado',
+                            'CANCELED' => 'Cancelado',
+                            'WAITING' => 'Aguardando',
+                            'FREE' => 'Isento',
+                            default => $state,
+                        };
+                    })
+                    ->searchable()
+                    ->sortable(),                
+                Tables\Columns\TextColumn::make('pagamento.order_id')
+                    ->label('order_id')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),    
                 Tables\Columns\TextColumn::make('observacao')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),    
@@ -165,28 +194,36 @@ class InscritoResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
+            // ->filters([
                 // Tables\Filters\Filter::make('observacao')
                 //     ->label("InChurch")
                 //     ->query(fn (Builder $query): Builder => $query->where('observacao', '=', "inchurch")),
-                Tables\Filters\Filter::make('situacao_pagamento')
-                    ->form([
-                        Checkbox::make('pago'),
-                        Checkbox::make('aberto'),
-                    ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when(
-                                $data['pago'],
-                                fn (Builder $query): Builder => $query->where('situacao_pagamento', '=', 'pago')
-                            )
-                            ->when(
-                                $data['aberto'],
-                                fn (Builder $query): Builder => $query->where('situacao_pagamento', '=', "aberto")
-                                            ->orWhere('situacao_pagamento', '=', null),
-                            );
-                    })
-            ])
+                // Tables\Filters\Filter::make('pagamento.status')
+                    // ->form([
+                        // Checkbox::make('pago'),
+                        // Checkbox::make('isento'),
+                        // Checkbox::make('aberto'),
+                    // ])
+                    // ->query(function (Builder $query, array $data): Builder {
+                    //     return $query->whereHas('pagamento', function (Builder $query) use ($data) {
+                    //         return $query
+                    //             ->when(
+                    //                 $data['pago'],
+                    //                 fn (Builder $query): Builder => $query->where('status', '=', 'PAID')
+                    //             )
+                    //             ->when(
+                    //                 $data['isento'],
+                    //                 fn (Builder $query): Builder => $query->where('status', '=', 'FREE')
+                    //             )
+                    //             ->when(
+                    //                 $data['aberto'],
+                    //                 fn (Builder $query): Builder => $query->where('status', '!=', 'PAID')
+                    //                                 ->Where('status', '!=', 'FREE')
+                    //                                 ->orWhereNull('status')
+                    //             );
+                    //     });
+                    // })
+            // ])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
@@ -207,7 +244,6 @@ class InscritoResource extends Resource
                 ]),
             ]);
     }
-
     public static function getRelations(): array
     {
         return [

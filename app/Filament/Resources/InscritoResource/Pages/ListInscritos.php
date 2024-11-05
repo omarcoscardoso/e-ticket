@@ -9,7 +9,7 @@ use Filament\Resources\Pages\ListRecords;
 class ListInscritos extends ListRecords
 {
     protected static string $resource = InscritoResource::class;
-
+ 
     protected function getHeaderActions(): array
     {
         return [

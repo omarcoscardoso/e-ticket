@@ -1,9 +1,17 @@
-<div class="flex flex-col bg-gray-300 justify-center p-2">
-    <form wire:submit="create">
-        {{ $this->form }}    
-        <button class="px-4 py-2 bg-green-500 hover:bg-green-400 text-white rounded-full my-4" type="submit">
-            Enviar
-        </button>
-    </form>
-    <x-filament-actions::modals />
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-300 scale-110">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-4xl w-full">
+        <h2 class="text-3xl font-bold text-center mb-4">Retiro de Verão 2025</h2>
+        <h3 class="text-2xl font-semibold text-center mb-4">Preencha o Formulário</h3>
+        <form wire:submit.prevent="create">
+            <div class="space-y-4">
+                {{ $this->form }}    
+            </div>
+            <br>
+            <button class="px-10 py-3 bg-green-500 text-white rounded-full hover:bg-green-700" type="submit">
+                Enviar
+            </button>
+            <button class="px-10 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-400"  type="button" onclick="window.location='/'">Voltar</button>
+        </form>
+        <x-filament-actions::modals />
+    </div>
 </div>

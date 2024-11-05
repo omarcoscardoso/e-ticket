@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -58,7 +59,11 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth(MaxWidth::Full)
             // ->favicon(asset('images/favicon.png'))
-            ->brandName('e-Ticket');
+            ->brandName('e-Ticket')
             // ->brandLogo(asset('images/favicon.png'));
+            ->navigationGroups([
+                'Controle de Inscrições',
+                'Configuração',
+            ]);
     }
 }

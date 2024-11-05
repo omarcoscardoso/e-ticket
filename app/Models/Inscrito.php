@@ -22,10 +22,11 @@ class Inscrito extends Model
         'sexo',
         'endereco',
         'celular',
+        'cpf',
         'batizado',
         'igreja_id',
         'tipo_pagamento',
-        'situacao_pagamento',
+        'tamanho_camiseta',
         'observacao',
     ];
 
@@ -33,7 +34,6 @@ class Inscrito extends Model
     {
         return $this->BelongsTo(Evento::class);
     }
-
     public function igreja()
     {
         return $this->BelongsTo(Igreja::class);
@@ -42,5 +42,23 @@ class Inscrito extends Model
     {
         return $this->BelongsTo(Ingresso::class);
     }
-    
+    public function pagamento()
+    {
+        return $this->hasOne(Pagamento::class);
+    }
+    protected static function booted()
+    {
+        static::retrieved(function ($inscrito) {
+            if ($inscrito->pagamento) {
+                $inscrito->pagamento->atualizarStatus($inscrito);  // Chama o método diretamente
+            }
+        });
+    }
+
+    public function getCustoAttribute()
+    {
+        // Supondo que 'ingresso_id' esteja disponível no objeto
+        $ingresso = Ingresso::find($this->ingresso_id);
+        return $ingresso ? $ingresso->custo : null;
+    }
 }

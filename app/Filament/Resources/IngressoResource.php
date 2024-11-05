@@ -18,8 +18,8 @@ use Leandrocfe\FilamentPtbrFormFields\Money;
 class IngressoResource extends Resource
 {
     protected static ?string $model = Ingresso::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Configuração';
+    protected static ?string $navigationIcon = 'bx-wallet-alt';
 
     public static function form(Form $form): Form
     {
