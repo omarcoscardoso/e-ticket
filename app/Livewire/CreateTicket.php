@@ -70,33 +70,34 @@ class CreateTicket extends Component implements HasForms
                 ->required(),
             TextInput::make('nome')
                 ->required()
-                // ->default('Teste'.random_int(1,1000))
+                ->default('Teste'.random_int(1,1000))
                 ->maxLength(255),
             DatePicker::make('data_nascimento')
                 ->label('Data de Nascimento')
-                // ->default(1982)
+                ->default(1982)
                 ->required(),
             Document::make('cpf')
                 ->label('CPF')
-                // ->default(99982013068)
+                ->default(99982013068)
                 ->required()
                 ->cpf(),
             PhoneNumber::make('celular')
-                // ->default('519928321'.random_int(10,99))
+                ->default('519928321'.random_int(10,99))
                 ->mask('(99) 99999-9999'),
             Select::make('sexo')
                 ->required()
-                // ->default('masculino')
+                ->default('masculino')
                 ->options([
                     'masculino' => 'Masculino',
                     'feminino' => 'Feminino'
                 ]),
             Select::make('batizado')
                 ->required()
-                // ->default(true)
+                ->default(true)
                 ->boolean(),
             Select::make('tamanho_camiseta')
                 ->required()
+                ->default('M')
                 ->options([
                     'PP' => 'PP',
                     'P' => 'P',
@@ -124,7 +125,7 @@ class CreateTicket extends Component implements HasForms
                 ->default('pix')
                 ->options([
                     'pix' => 'PIX',
-                    'cartao_credito' => 'CARTÃO DE CRÉDITO',
+                    // 'cartao_credito' => 'CARTÃO DE CRÉDITO',
                     'isento' => 'Isento',
                 ]),
         ])
@@ -226,7 +227,7 @@ class CreateTicket extends Component implements HasForms
       
           $response = curl_exec($curl);
           $error = curl_error($curl);
-      
+
           curl_close($curl);
       
           if ($error) {
@@ -244,9 +245,9 @@ class CreateTicket extends Component implements HasForms
 
     static function qrcode($atributos, $dadosform)
     {
-        $endpoint = 'https://api.pagseguro.com/orders';
-        // $token = '6b78552e-a570-4009-aef1-08a359724241df7d76194619b9d708594cf45217b0e39615-69c3-4fa7-b2ce-0c5142182d9d'; // sandbox
-        $token = 'd943f521-b1d8-4459-8d95-235fa2f7e6ca5707c8514502abba78ba93015bafa78e2ed5-5db4-4fb1-808a-3e61e1355bfe'; // production
+        $endpoint = 'https://sandbox.api.pagseguro.com/orders';
+        $token = '6b78552e-a570-4009-aef1-08a359724241df7d76194619b9d708594cf45217b0e39615-69c3-4fa7-b2ce-0c5142182d9d'; // sandbox
+        // $token = 'd943f521-b1d8-4459-8d95-235fa2f7e6ca5707c8514502abba78ba93015bafa78e2ed5-5db4-4fb1-808a-3e61e1355bfe'; // production
 
     
         $evento = Evento::query()->where('id', '=', $atributos['evento_id'])->value('nome_evento');
@@ -318,7 +319,7 @@ class CreateTicket extends Component implements HasForms
     
         $response = curl_exec($curl);
         $error = curl_error($curl);
-    
+
         curl_close($curl);
     
         if ($error) {
@@ -327,7 +328,6 @@ class CreateTicket extends Component implements HasForms
         }
         
         $data = json_decode($response, true);
-        dd($data);
     
         return $data;
     }
