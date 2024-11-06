@@ -23,9 +23,13 @@
     </div>
 </div> 
 <script>
-     function copyToClickBoard(){
+    function copyToClickBoard() {
         var content = document.getElementById('dado').innerHTML;
-            navigator.clipboard.writeText(content)
+        navigator.clipboard.writeText(content).then(function() {
+            alert('Código PIX copiado! Abra o aplicativo do seu banco para colar e concluir o pagamento.');
+        }).catch(function(error) {
+            console.error('Erro ao copiar para a área de transferência:', error);
+        });
     }
 </script>
 

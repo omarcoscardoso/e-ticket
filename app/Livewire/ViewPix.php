@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Evento;
+use Filament\Notifications\Notification;
 use Livewire\Component;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -31,7 +32,7 @@ class ViewPix extends Component implements HasForms
     {
         redirect('/');
     }
-
+    
     public function render()
     {
         return view('livewire.view-pix');
