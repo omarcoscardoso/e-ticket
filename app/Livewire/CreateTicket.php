@@ -45,7 +45,8 @@ class CreateTicket extends Component implements HasForms
                 ->hidden(true)
                 ->required(),
             Select::make('ingresso_id')
-                ->label('Escolha um Ingresso')
+                ->label('Ingresso')
+                ->placeholder('Escolha um Ingresso')
                 ->options(fn(Get $get): Collection => Ingresso::query()
                     ->where('evento_id', $get('evento_id'))
                     ->where('ativo', '=', true)
