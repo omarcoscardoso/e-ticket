@@ -330,10 +330,10 @@ class CreateTicket extends Component implements HasForms
           die();
         }
         
-        dd($response);
-
         $data = json_decode($response, true);
-    
+        
+        dd($data);
+        
         return $data;
     }
 
