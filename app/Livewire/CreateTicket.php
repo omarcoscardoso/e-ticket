@@ -212,8 +212,12 @@ class CreateTicket extends Component implements HasForms
     
     static function status_pagamento($order_id)
     {
-        $endpoint = 'https://sandbox.api.pagseguro.com/orders/'.$order_id;
-        $token = '6b78552e-a570-4009-aef1-08a359724241df7d76194619b9d708594cf45217b0e39615-69c3-4fa7-b2ce-0c5142182d9d';
+        // $endpoint = 'https://sandbox.api.pagseguro.com/orders/'.$order_id;
+        // $token = '6b78552e-a570-4009-aef1-08a359724241df7d76194619b9d708594cf45217b0e39615-69c3-4fa7-b2ce-0c5142182d9d';
+
+        $endpoint = 'https://api.pagseguro.com/orders';
+        $token = 'd943f521-b1d8-4459-8d95-235fa2f7e6ca5707c8514502abba78ba93015bafa78e2ed5-5db4-4fb1-808a-3e61e1355bfe'; // production
+
 
           $curl = curl_init();
           curl_setopt($curl, CURLOPT_URL, $endpoint);
@@ -332,7 +336,7 @@ class CreateTicket extends Component implements HasForms
         
         $data = json_decode($response, true);
         
-        dd($data);
+        // dd($data);
         
         return $data;
     }
