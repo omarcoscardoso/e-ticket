@@ -307,7 +307,7 @@ class CreateTicket extends Component implements HasForms
             ]
           ];
     
-        dd($body);
+        // dd($body);
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $endpoint);
         curl_setopt($curl, CURLOPT_POST, true);
@@ -330,7 +330,7 @@ class CreateTicket extends Component implements HasForms
           die();
         }
         
-        var_dump($response);
+        dd($response);
 
         $data = json_decode($response, true);
     
