@@ -97,7 +97,7 @@ class InscritoResource extends Resource
                         'isento' => 'Isento'
                     ]),
                 Forms\Components\Select::make('pagamento.status')
-                    ->label('Status Pagamento')    
+                    ->label('Status Pagamentos')    
                     ->options([
                             'PAID' => 'Pago',
                             'IN_ANALYSIS' => 'Em Análise',
