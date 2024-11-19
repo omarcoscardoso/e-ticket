@@ -2,28 +2,41 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Inscrito;
+use App\Models\Pagamento;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-
 
 class StatusPagamentosOverview extends BaseWidget
 {
     
     protected static ?int $sort = 2;
-    // protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = 3;
 
     protected function getStats(): array
     {
         return [
-            Stat::make('Pagamentos', Inscrito::query()->where('situacao_pagamento', '=', 'pago')->count())
-            ->description('Pagamentos registrados')
-            ->descriptionIcon('heroicon-m-arrow-trending-up')
-            ->color('warning'),
-        Stat::make('Em Aberto', Inscrito::query()->where('situacao_pagamento', '=', 'aberto')
-                                                 ->orWhere('situacao_pagamento', '=', null) ->count())
-            ->description('Inscrições sem Pagamento identificado')
-            ->color('danger'),
+            // Pagamentos realizados
+            Stat::make('Pagamentos', Pagamento::query()->where('status', '=', 'PAID')->count())
+                ->description('Pagamentos registrados')
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                ->color('success'),
+
+            // Pagamentos em análise
+            Stat::make('Em Análise', Pagamento::query()->where('status', '=', 'IN_ANALYSIS')->count())
+                ->description('Pagamentos aguardando confirmação')
+                ->color('warning'),
+
+            // Pagamentos recusados ou cancelados
+            Stat::make('Recusados/Cancelados', Pagamento::query()
+                ->whereIn('status', ['DECLINED', 'CANCELED'])->count())
+                ->description('Pagamentos não aprovados')
+                ->color('danger'),
+
+            // Pagamentos aguardando ou isentos
+            Stat::make('Aguardando/Isento', Pagamento::query()
+                ->whereIn('status', ['WAITING', 'FREE'])->count())
+                ->description('Inscrições aguardando pagamento ou isentas')
+                ->Color('info'),
         ];
     }
 }

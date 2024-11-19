@@ -13,9 +13,11 @@ class InscritosIgrejaChart extends ChartWidget
     protected static string $color = 'success';
     protected function getData(): array
     {
-        $data = Inscrito::select('igreja', DB::raw('count(*) as count'))
-        ->groupBy('igreja')
-        ->orderBy('igreja')
+
+        $data = Inscrito::join('igrejas', 'inscritos.igreja_id', '=', 'igrejas.id')
+        ->select('igrejas.nome as igreja', DB::raw('count(inscritos.id) as count'))
+        ->groupBy('igrejas.nome')
+        ->orderBy('igrejas.nome')
         ->pluck('count', 'igreja')
         ->toArray();
 
