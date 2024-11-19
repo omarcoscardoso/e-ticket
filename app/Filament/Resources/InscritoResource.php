@@ -97,7 +97,7 @@ class InscritoResource extends Resource
                         'isento' => 'Isento'
                     ]),
                 Forms\Components\Select::make('pagamento.status')
-                    ->label('Status Pagamentos')    
+                    ->label('Status Pagamento')                    
                     ->options([
                             'PAID' => 'Pago',
                             'IN_ANALYSIS' => 'Em Análise',
@@ -105,7 +105,8 @@ class InscritoResource extends Resource
                             'CANCELED' => 'Cancelado',
                             'WAITING' => 'Aguardando',
                             'FREE' => 'Isento',                        
-                    ])
+                    ]) 
+                    ->preload()
             ])->columns(4);
     }
 
@@ -259,4 +260,5 @@ class InscritoResource extends Resource
             'edit' => Pages\EditInscrito::route('/{record}/edit'),
         ];
     }
+
 }

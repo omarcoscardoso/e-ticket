@@ -2,20 +2,16 @@
 
 namespace App\Livewire;
 
-// use App\Livewire\ViewPix;
 use App\Models\Inscrito;
 use App\Models\Ingresso;
 use App\Models\Evento;
 use App\Models\Pagamento;
 use Filament\Forms\Components\DatePicker;
-// use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
-// use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
-// use GrahamCampbell\ResultType\Success;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Livewire\Component;
@@ -24,8 +20,6 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\TextInput;
 use Leandrocfe\FilamentPtbrFormFields\PhoneNumber;
 use Leandrocfe\FilamentPtbrFormFields\Document;
-// use Leandrocfe\FilamentPtbrFormFields\Money;
-// use Livewire\Livewire;
 
 class CreateTicket extends Component implements HasForms
 {
@@ -209,53 +203,9 @@ class CreateTicket extends Component implements HasForms
                 break;
         }
     }
-    
-    // static function status_pagamento($order_id)
-    // {
-    //     // $endpoint = 'https://sandbox.api.pagseguro.com/orders/'.$order_id;
-    //     // $token = '6b78552e-a570-4009-aef1-08a359724241df7d76194619b9d708594cf45217b0e39615-69c3-4fa7-b2ce-0c5142182d9d';
-
-    //     $endpoint = 'https://api.pagseguro.com/orders';
-    //     $token = 'd943f521-b1d8-4459-8d95-235fa2f7e6ca5707c8514502abba78ba93015bafa78e2ed5-5db4-4fb1-808a-3e61e1355bfe'; // production
-
-
-    //       $curl = curl_init();
-    //       curl_setopt($curl, CURLOPT_URL, $endpoint);
-    //       curl_setopt($curl, CURLOPT_POST, false);
-    //       curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    //       curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
-    //       curl_setopt($curl, CURLOPT_CAINFO, "cacert.pem");
-    //       curl_setopt($curl, CURLOPT_HTTPHEADER, [
-    //         'Content-Type:application/json',
-    //         'Authorization: Bearer ' . $token
-    //       ]);
-      
-    //       $response = curl_exec($curl);
-    //       $error = curl_error($curl);
-
-    //       curl_close($curl);
-      
-    //       if ($error) {
-    //         var_dump($error);
-    //         die();
-    //       }
-      
-    //       $data = json_decode($response, true);
-
-    //       $data = $data['charges'][0]['status'];
-
-    //       return $data;
-
-    // }
 
     static function qrcode($atributos, $dadosform)
-    {
-        // $endpoint = 'https://sandbox.api.pagseguro.com/orders';
-        // $token = '6b78552e-a570-4009-aef1-08a359724241df7d76194619b9d708594cf45217b0e39615-69c3-4fa7-b2ce-0c5142182d9d'; // sandbox
-        $endpoint = 'https://api.pagseguro.com/orders';
-        $token = 'd943f521-b1d8-4459-8d95-235fa2f7e6ca5707c8514502abba78ba93015bafa78e2ed5-5db4-4fb1-808a-3e61e1355bfe'; // production
-
-    
+    {    
         $evento = Evento::query()->where('id', '=', $atributos['evento_id'])->value('nome_evento');
 
         $pattern = '/\((\d{2})\)\s*([\d-]+)/';
@@ -312,6 +262,9 @@ class CreateTicket extends Component implements HasForms
           ];
     
         // dd($body);
+        $endpoint = env('PAGBANK_ENDPOINT');
+        $token = env('PAGBANK_TOKEN'); 
+
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $endpoint);
         curl_setopt($curl, CURLOPT_POST, true);
