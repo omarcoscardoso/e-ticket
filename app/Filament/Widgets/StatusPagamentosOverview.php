@@ -9,8 +9,8 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class StatusPagamentosOverview extends BaseWidget
 {
     
-    protected static ?int $sort = 2;
-    protected int | string | array $columnSpan = 4;
+    protected static ?int $sort = 3;
+    protected int | string | array $columnSpan = 'full';
 
     protected function getStats(): array
     {
@@ -27,7 +27,7 @@ class StatusPagamentosOverview extends BaseWidget
             //     ->color('warning'),
 
             // Pagamentos recusados ou cancelados
-            Stat::make('Recusados/Cancelados', Pagamento::query()
+            Stat::make('Cancelados', Pagamento::query()
                 ->whereIn('status', ['DECLINED', 'CANCELED'])->count())
                 ->description('Pagamentos não aprovados')
                 ->color('danger'),
@@ -35,7 +35,7 @@ class StatusPagamentosOverview extends BaseWidget
             // Pagamentos aguardando ou isentos
             Stat::make('Aguardando', Pagamento::query()
                 ->whereIn('status', ['WAITING', 'IN_ANALYSIS'])->count())
-                ->description('Inscrições aguardando pagamento ou isentas')
+                ->description('Inscrições aguardando pagamento')
                 ->Color('warning'),
             
             // Pagamentos aguardando ou isentos

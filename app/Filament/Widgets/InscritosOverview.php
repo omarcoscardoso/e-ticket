@@ -9,13 +9,12 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class InscritosOverview extends BaseWidget
 {
     protected static ?int $sort = 1;
-
-    protected int | string | array $columnSpan = 2;
+    protected int | string | array $columnSpan = 1;
     
     protected function getStats(): array
     {
         return [
-            Stat::make('Inscrito', Inscrito::query()->count())
+            Stat::make('Inscrições', Inscrito::query()->count())
                 ->description('Inscritos')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->chart([7, 2, 10, 3, 15, 4, 17])
@@ -26,11 +25,13 @@ class InscritosOverview extends BaseWidget
             Stat::make('Mulheres', Inscrito::query()->where('sexo', '=', 'feminino')->count())
                 ->description('Mulheres inscritas')
                 ->color('warning'),
-            Stat::make('Crianças', Inscrito::query()->where('ingresso_id', '=', '2')->count())
-                ->description('(8 à 12)')
+            Stat::make('Crianças', Inscrito::join('ingressos', 'inscritos.ingresso_id', '=', 'ingressos.id')
+                                                    ->where('ingressos.nome','=','Criança (8 à 12)')->count())
+                ->description('Crianças de 8 à 12')
                 ->color('info'),
-            Stat::make('Crianças', Inscrito::query()->where('ingresso_id', '=', '3')->count())
-                ->description('ISENTO')
+            Stat::make('Crianças', Inscrito::join('ingressos', 'inscritos.ingresso_id', '=', 'ingressos.id')
+                                                    ->where('ingressos.custo','=',0)->count())
+                ->description('Menores de 8 anos')
                 ->color('info'),
             Stat::make('Não Batizados', Inscrito::query()->where('batizado', '=', false)->count() )
                 ->description('Número de inscritos não batizados')

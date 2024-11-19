@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\DB;
 class InscritosIgrejaChart extends ChartWidget
 {
     protected static ?string $heading = 'Inscritos p/ igreja';
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 2;
+    // protected int | string | array $columnSpan = 2;
     protected static string $color = 'success';
     protected function getData(): array
     {
