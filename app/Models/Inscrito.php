@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Inscrito extends Model
 {
@@ -48,11 +47,11 @@ class Inscrito extends Model
     }
     protected static function booted()
     {
-        static::retrieved(function ($inscrito) {
-            if ($inscrito->pagamento) {
-                $inscrito->pagamento->atualizarStatus($inscrito);  // Chama o método diretamente
-            }
-        });
+        // static::retrieved(function ($inscrito) {
+        //     if ($inscrito->pagamento) {
+        //         $inscrito->pagamento->atualizarStatus($inscrito);  // Chama o método diretamente
+        //     }
+        // });
     }
 
     public function getCustoAttribute()

@@ -65,34 +65,34 @@ class CreateTicket extends Component implements HasForms
                 ->required(),
             TextInput::make('nome')
                 ->required()
-                // ->default('Teste'.random_int(1,1000))
+                ->default('Teste'.random_int(1,1000))
                 ->maxLength(255),
             DatePicker::make('data_nascimento')
                 ->label('Data de Nascimento')
-                // ->default(1982)
+                ->default(1982)
                 ->required(),
             Document::make('cpf')
                 ->label('CPF')
-                // ->default(99982013068)
+                ->default(99982013068)
                 ->required()
                 ->cpf(),
             PhoneNumber::make('celular')
-                // ->default('519928321'.random_int(10,99))
+                ->default('519928321'.random_int(10,99))
                 ->mask('(99) 99999-9999'),
             Select::make('sexo')
                 ->required()
-                // ->default('masculino')
+                ->default('masculino')
                 ->options([
                     'masculino' => 'Masculino',
                     'feminino' => 'Feminino'
                 ]),
             Select::make('batizado')
                 ->required()
-                // ->default(true)
+                ->default(true)
                 ->boolean(),
             Select::make('tamanho_camiseta')
                 ->required()
-                // ->default('M')
+                ->default('M')
                 ->options([
                     'PP' => 'PP',
                     'P' => 'P',
@@ -121,6 +121,7 @@ class CreateTicket extends Component implements HasForms
                 ->options([
                     'pix' => 'PIX',
                     'cartao_credito' => 'CARTÃO DE CRÉDITO',
+                    'local' => 'PAGAR NO DIA DO EVENTO',
                     'isento' => 'Isento',
                 ]),
         ])
@@ -163,10 +164,18 @@ class CreateTicket extends Component implements HasForms
                         Pagamento::create( [
                             'status' => 'FREE',
                             'inscrito_id' => $atributos['id'],
-                            'order_id' => 'FREE'.random_int(1,99),
+                            'order_id' => 'FREE'.random_int(1,999999),
                         ]);
                         redirect('/');
                         break;
+                    case 'local':
+                            Pagamento::create( [
+                                'status' => 'WAITING',
+                                'inscrito_id' => $atributos['id'],
+                                'order_id' => 'WAITING'.random_int(1,999999),
+                            ]);
+                            redirect('/');
+                            break;
                     case 'pix':
                         $qrcode = $this->qrcode($atributos,dadosform: $stateData);
                         $status = Pagamento::create( [

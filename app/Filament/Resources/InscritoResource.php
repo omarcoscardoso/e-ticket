@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\InscritoResource\Pages;
 use App\Models\Ingresso;
 use App\Models\Inscrito;
-use App\Models\Pagamento;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
@@ -19,7 +18,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Leandrocfe\FilamentPtbrFormFields\PhoneNumber;
 use Leandrocfe\FilamentPtbrFormFields\Document;
-use Illuminate\Support\Facades\Http;
 
 class InscritoResource extends Resource
 {
@@ -94,6 +92,7 @@ class InscritoResource extends Resource
                     ->options([
                         'pix' => 'PIX',
                         'cartao_credito' => 'CARTÃO DE CRÉDITO',
+                        'local' => 'PAGAR NO DIA DO EVENTO',
                         'isento' => 'Isento'
                     ]),
                 Forms\Components\Select::make('pagamento.status')
@@ -155,6 +154,15 @@ class InscritoResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('tipo_pagamento')
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            'pix' => 'PIX',
+                            'cartao_credito' => 'CARTÃO DE CRÉDITO',
+                            'local' => 'LOCAL',
+                            'isento' => 'Isento',
+                            default => $state,
+                        };
+                    })
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tamanho_camiseta')
@@ -195,38 +203,48 @@ class InscritoResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            // ->filters([
+            ->filters([
                 // Tables\Filters\Filter::make('observacao')
                 //     ->label("InChurch")
                 //     ->query(fn (Builder $query): Builder => $query->where('observacao', '=', "inchurch")),
-                // Tables\Filters\Filter::make('pagamento.status')
-                    // ->form([
-                        // Checkbox::make('pago'),
-                        // Checkbox::make('isento'),
-                        // Checkbox::make('aberto'),
-                    // ])
-                    // ->query(function (Builder $query, array $data): Builder {
-                    //     return $query->whereHas('pagamento', function (Builder $query) use ($data) {
-                    //         return $query
-                    //             ->when(
-                    //                 $data['pago'],
-                    //                 fn (Builder $query): Builder => $query->where('status', '=', 'PAID')
-                    //             )
-                    //             ->when(
-                    //                 $data['isento'],
-                    //                 fn (Builder $query): Builder => $query->where('status', '=', 'FREE')
-                    //             )
-                    //             ->when(
-                    //                 $data['aberto'],
-                    //                 fn (Builder $query): Builder => $query->where('status', '!=', 'PAID')
-                    //                                 ->Where('status', '!=', 'FREE')
-                    //                                 ->orWhereNull('status')
-                    //             );
-                    //     });
-                    // })
-            // ])
+                Tables\Filters\Filter::make('inscritos.batizado')
+                    ->form([
+                        Checkbox::make('Batizados'),
+                        Checkbox::make('Não Batizados'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['Batizados'],
+                                fn (Builder $query): Builder => $query->where('batizado', true)
+                            )
+                            ->when(
+                                $data['Não Batizados'],
+                                fn (Builder $query): Builder => $query->where('batizado', false)
+                            );
+                    }),
+                Tables\Filters\Filter::make('pagamento.status')
+                    ->form([
+                        Checkbox::make('pago'),
+                        Checkbox::make('isento'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->whereHas('pagamento', function (Builder $query) use ($data) {
+                            return $query
+                                ->when(
+                                    $data['pago'],
+                                    fn (Builder $query): Builder => $query->where('status', '=', 'PAID')
+                                )
+                                ->when(
+                                    $data['isento'],
+                                    fn (Builder $query): Builder => $query->where('status', '=', 'FREE')
+                                );
+                        });
+                    })
+            ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->iconButton(),
+                Tables\Actions\ViewAction::make()->iconButton(),                
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -240,6 +258,18 @@ class InscritoResource extends Resource
                                     Blade::render('pdf', ['records' => $records])
                                 )->stream();
                             }, 'relatorio.pdf');
+                        }),
+                    Tables\Actions\BulkAction::make('Atualizar Todos os Status')
+                        ->icon('heroicon-m-arrow-path')
+                        ->action(function () {
+                            // Buscar todos os registros que você deseja atualizar
+                            $inscritos = Inscrito::all();
+                    
+                            foreach ($inscritos as $inscrito) {
+                                if ($inscrito->pagamento) {
+                                    $inscrito->pagamento->atualizarStatus($inscrito);
+                                }
+                            }
                         }),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
