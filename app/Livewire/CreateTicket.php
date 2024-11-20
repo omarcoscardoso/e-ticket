@@ -164,7 +164,7 @@ class CreateTicket extends Component implements HasForms
                         Pagamento::create( [
                             'status' => 'FREE',
                             'inscrito_id' => $atributos['id'],
-                            'order_id' => 'FREE'.random_int(1,999999),
+                            'order_id' => 'FREE_'.random_int(1,999999),
                         ]);
                         redirect('/');
                         break;
@@ -172,7 +172,7 @@ class CreateTicket extends Component implements HasForms
                             Pagamento::create( [
                                 'status' => 'WAITING',
                                 'inscrito_id' => $atributos['id'],
-                                'order_id' => 'LOCAL'.random_int(1,999999),
+                                'order_id' => 'LOCAL_'.random_int(1,999999),
                             ]);
                             redirect('/');
                             break;
@@ -180,7 +180,7 @@ class CreateTicket extends Component implements HasForms
                                 Pagamento::create( [
                                     'status' => 'IN_ANALYSIS',
                                     'inscrito_id' => $atributos['id'],
-                                    'order_id' => 'CREDITO'.random_int(1,999999),
+                                    'order_id' => 'CREDITO_'.random_int(1,999999),
                                 ]);
                                 redirect($link);
                                 break;

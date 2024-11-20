@@ -24,7 +24,7 @@
 
 <p> e-Ticket :: Relatório de Inscrições
     <br>
-    <strong>Encontro de Jovens</strong> | Presbitério Catarinense
+    <strong>Retiro de Verão</strong>
 </p>
 <p class="data">{{ date("d/m/Y H:m:s") }}</p>
 
@@ -38,7 +38,7 @@
             <th>Celular</th>
             <!-- <th>Sexo</th> -->
             <!-- <th>Batizado</th> -->
-            <th>Igreja</th>
+            <!-- <th>Igreja</th> -->
             <th>Pagamento</th>
             <th>Status</th>
             <!-- <th>Obs</th> -->
@@ -55,9 +55,9 @@
                 <!-- <td>{{ $record->endereco }}</td> -->
                 <td>{{ $record->celular }}</td>
                 <!-- <td>{{ $record->batizado }}</td> -->
-                <td>{{ $record->igreja }}</td>
+                <!-- <td>{{ $record->igreja }}</td> -->
                 <td>{{ $record->tipo_pagamento }}</td>
-                <td>{{ $record->situacao_pagamento }}</td>
+                <td>{{ $record->status_pagamento }}</td>
                 <!-- <td>{{ $record->observacao }}</td> -->
                 <!-- <td>{{ $record->created_at }}</td> -->
             </tr>

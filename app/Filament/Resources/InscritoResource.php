@@ -261,6 +261,26 @@ class InscritoResource extends Resource
                         ->deselectRecordsAfterCompletion()
                         ->action(function (Collection $records) {
                             return response()->streamDownload(function () use ($records) {
+                                // Mapeamento de status
+                                $statusMap = [
+                                    'PAID' => 'Pago',
+                                    'IN_ANALYSIS' => 'Em Análise',
+                                    'DECLINED' => 'Recusado',
+                                    'CANCELED' => 'Cancelado',
+                                    'WAITING' => 'Aguardando',
+                                    'FREE' => 'Isento',
+                                ];
+                                
+                                $records = $records->map(function ($record) use ($statusMap) {
+                                    // Pega o status do pagamento ou 'Sem status' se não houver
+                                    $status = $record->pagamento ? $record->pagamento->status : null;
+            
+                                    // Traduz o status
+                                    $record->status_pagamento = $status ? $statusMap[$status] ?? 'Desconhecido' : 'Sem status';
+                                    
+                                    return $record;
+                                });
+                                
                                 echo Pdf::loadHTML(
                                     Blade::render('pdf', ['records' => $records])
                                 )->stream();
