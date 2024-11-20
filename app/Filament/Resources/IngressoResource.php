@@ -36,8 +36,6 @@ class IngressoResource extends Resource
                     ->prefix('R$')
                     ->default('0,00')
                     ->required(),
-                // Forms\Components\TextInput::make('custo')
-                    // ->numeric(),
                 Forms\Components\Toggle::make('ativo')
                     ->required(),
             ])->columns(1);

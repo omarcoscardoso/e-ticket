@@ -20,9 +20,12 @@ class EditInscrito extends EditRecord
 
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        // dd($data);
         $record->update($data);
-    
+        
+        // atualize o status do pagamento
+        $pagamento = $record->pagamento;
+        $pagamento->update(['status' => $data['status'],]);
+        
         return $record;
     }
 

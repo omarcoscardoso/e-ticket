@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\InscritoResource\Pages;
 use App\Models\Ingresso;
 use App\Models\Inscrito;
+use App\Models\Pagamento;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
@@ -95,19 +96,25 @@ class InscritoResource extends Resource
                         'local' => 'PAGAR NO DIA DO EVENTO',
                         'isento' => 'Isento'
                     ]),
-                Forms\Components\Select::make('pagamento.status')
-                    ->label('Status Pagamento')                    
+
+                Forms\Components\Select::make('status')
+                    ->label('Status do Pagamento')
                     ->options([
-                            'PAID' => 'Pago',
-                            'IN_ANALYSIS' => 'Em Análise',
-                            'DECLINED' => 'Recusado',
-                            'CANCELED' => 'Cancelado',
-                            'WAITING' => 'Aguardando',
-                            'FREE' => 'Isento',                        
-                    ]) 
-                    ->preload()
+                        'PAID' => 'Pago',
+                        'IN_ANALYSIS' => 'Em Análise',
+                        'DECLINED' => 'Recusado',
+                        'CANCELED' => 'Cancelado',
+                        'WAITING' => 'Aguardando',
+                        'FREE' => 'Isento',
+                    ])
+                    ->formatStateUsing(function ($record) {
+                        return $record?->pagamento?->status;
+                    })                    
+                    ->placeholder('Selecione o status'),
+                    
             ])->columns(4);
     }
+
 
     public static function table(Table $table): Table
     {
@@ -259,7 +266,7 @@ class InscritoResource extends Resource
                                 )->stream();
                             }, 'relatorio.pdf');
                         }),
-                    Tables\Actions\BulkAction::make('Atualizar Todos os Status')
+                    Tables\Actions\BulkAction::make('Atualizar Status Pagamento')
                         ->icon('heroicon-m-arrow-path')
                         ->action(function () {
                             // Buscar todos os registros que você deseja atualizar

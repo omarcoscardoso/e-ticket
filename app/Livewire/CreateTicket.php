@@ -34,7 +34,7 @@ class CreateTicket extends Component implements HasForms
             Select::make('evento_id')
                 ->label('Evento')
                 ->relationship('evento','nome_evento')
-                // ->default(1)
+                ->default(1)
                 ->live()
                 ->hidden(true)
                 ->required(),
@@ -172,10 +172,18 @@ class CreateTicket extends Component implements HasForms
                             Pagamento::create( [
                                 'status' => 'WAITING',
                                 'inscrito_id' => $atributos['id'],
-                                'order_id' => 'WAITING'.random_int(1,999999),
+                                'order_id' => 'LOCAL'.random_int(1,999999),
                             ]);
                             redirect('/');
                             break;
+                    case 'cartao_credito':
+                                Pagamento::create( [
+                                    'status' => 'IN_ANALYSIS',
+                                    'inscrito_id' => $atributos['id'],
+                                    'order_id' => 'CREDITO'.random_int(1,999999),
+                                ]);
+                                redirect($link);
+                                break;
                     case 'pix':
                         $qrcode = $this->qrcode($atributos,dadosform: $stateData);
                         $status = Pagamento::create( [
@@ -186,7 +194,7 @@ class CreateTicket extends Component implements HasForms
                         session()->flash('qrcode', $qrcode);
                         return redirect()->route('pix');
                     default:
-                        redirect($link);
+                        redirect('/');
                         break;
                 }
                 $this->mount();
