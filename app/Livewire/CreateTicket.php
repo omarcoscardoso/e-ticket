@@ -34,7 +34,7 @@ class CreateTicket extends Component implements HasForms
             Select::make('evento_id')
                 ->label('Evento')
                 ->relationship('evento','nome_evento')
-                ->default(1)
+                // ->default(1)
                 ->live()
                 ->hidden(true)
                 ->required(),
@@ -65,34 +65,34 @@ class CreateTicket extends Component implements HasForms
                 ->required(),
             TextInput::make('nome')
                 ->required()
-                ->default('Teste'.random_int(1,1000))
+                // ->default('Teste'.random_int(1,1000))
                 ->maxLength(255),
             DatePicker::make('data_nascimento')
                 ->label('Data de Nascimento')
-                ->default(1982)
+                // ->default(1982)
                 ->required(),
             Document::make('cpf')
                 ->label('CPF')
-                ->default(99982013068)
+                // ->default(99982013068)
                 ->required()
                 ->cpf(),
             PhoneNumber::make('celular')
-                ->default('519928321'.random_int(10,99))
+                // ->default('519928321'.random_int(10,99))
                 ->mask('(99) 99999-9999'),
             Select::make('sexo')
                 ->required()
-                ->default('masculino')
+                // ->default('masculino')
                 ->options([
                     'masculino' => 'Masculino',
                     'feminino' => 'Feminino'
                 ]),
             Select::make('batizado')
                 ->required()
-                ->default(true)
+                // ->default(true)
                 ->boolean(),
             Select::make('tamanho_camiseta')
                 ->required()
-                ->default('M')
+                // ->default('M')
                 ->options([
                     'PP' => 'PP',
                     'P' => 'P',
@@ -113,11 +113,11 @@ class CreateTicket extends Component implements HasForms
                             ->orderBy('nome')
                             
                 )
-                ->default(1)
+                // ->default(1)
                 ->required(),
             Select::make('tipo_pagamento')
                 ->required()
-                ->default('pix')
+                // ->default('pix')
                 ->options([
                     'pix' => 'PIX',
                     'cartao_credito' => 'CARTÃO DE CRÉDITO',
