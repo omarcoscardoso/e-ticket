@@ -1,4 +1,4 @@
-<div class="flex flex-col items-center justify-center min-h-screen bg-gray-300 scale-110">
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-300">
     <div class="bg-white p-6 rounded-lg shadow-lg max-w-4xl w-full">
         <h2 class="text-3xl font-bold text-center mb-4">Retiro de Verão 2025</h2>
         <h3 class="text-2xl font-semibold text-center mb-4">Preencha o Formulário</h3>

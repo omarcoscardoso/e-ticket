@@ -18,8 +18,9 @@
         @filamentStyles
         @vite('resources/css/app.css')
     </head>
-
+  
     <body class="antialiased">
+        <x-navbar /> 
         {{ $slot }}
 
         @livewire('notifications')
@@ -27,4 +28,5 @@
         @filamentScripts
         @vite('resources/js/app.js')
     </body>
+
 </html>
