@@ -20,7 +20,7 @@
     </head>
   
     <body class="antialiased">
-        <x-navbar /> 
+         
         {{ $slot }}
 
         @livewire('notifications')
