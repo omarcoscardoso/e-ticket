@@ -7,6 +7,7 @@ use App\Models\Ingresso;
 use App\Models\Inscrito;
 use App\Models\Pagamento;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Form;
@@ -302,6 +303,7 @@ class InscritoResource extends Resource
                 ]),
             ]);
     }
+
     public static function getRelations(): array
     {
         return [
