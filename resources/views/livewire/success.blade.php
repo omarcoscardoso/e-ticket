@@ -1,8 +1,3 @@
-    {{-- Success is as dangerous as failure. --}}
-
-    {{-- dd($data) }}
- {{-- Success is as dangerous as failure. --}}
-
 <div class="flex items-center justify-center min-h-screen bg-gradient-to-br from-teal-500 via-cyan-500 to-teal-400">
     <div class="relative max-w-xl w-11/12 mx-auto p-6 bg-white rounded-md shadow-lg text-center text-teal-600">
         <h1 class="font-sans text-3xl md:text-4xl font-bold mb-6">
@@ -21,8 +16,8 @@
         <div class="mt-6">
             <p class="font-sans text-base md:text-lg text-gray-700 mb-4">
                 Você se inscreveu para o Retiro de Verão 2025! <br><br>
-                <span class="font-semibold">Data:</span> {{$data['local']->getAttributes()['updated_at']}}<br>
-                <span class="font-semibold">Identificador:</span> {{$data['local']->getAttributes()['order_id']}}<br>
+                <span class="font-semibold">Data:</span> {{$data['status']->getAttributes()['updated_at']}}<br>
+                <span class="font-semibold">Identificador:</span> {{$data['status']->getAttributes()['order_id']}}<br>
                 <span class="font-semibold">Nome:</span> {{$data['atributos']['nome']}}<br>
                 <span class="font-semibold">CPF:</span> {{$data['atributos']['cpf']}} <br>
                 <span class="font-semibold">Celular:</span> {{$data['atributos']['celular']}} <br>
@@ -34,8 +29,8 @@
             <a 
                href="https://wa.me/?text={{ rawurlencode(
                     "Você se inscreveu para o Retiro de Verão 2025!\n\n" .
-                    "Data: " . $data['local']->getAttributes()['updated_at'] . "\n" .
-                    "Identificador: " . $data['local']->getAttributes()['order_id'] . "\n" .
+                    "Data: " . $data['status']->getAttributes()['updated_at'] . "\n" .
+                    "Identificador: " . $data['status']->getAttributes()['order_id'] . "\n" .
                     "Nome: " . $data['atributos']['nome'] . "\n" .
                     "CPF: " . $data['atributos']['cpf'] . "\n" .
                     "Celular: " . $data['atributos']['celular'] . "\n" .
@@ -45,6 +40,13 @@
                target="_blank" 
                class="px-4 py-2 bg-green-500 text-white rounded-lg">
                Enviar para WhatsApp
+            </a>
+            <br><br><br>
+            <a 
+               href="/ticket" 
+               target="_self" 
+               class="px-4 py-2 bg-blue-500 text-white rounded-lg">
+               Nova inscrição
             </a>
         </div>
         <p class="mt-4 text-sm text-teal-700 font-medium">@iprviamao</p>

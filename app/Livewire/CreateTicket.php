@@ -161,30 +161,31 @@ class CreateTicket extends Component implements HasForms
                 }
                 switch ($stateData['tipo_pagamento']) {
                     case 'isento':
-                        Pagamento::create( [
+                        $status = Pagamento::create( [
                             'status' => 'FREE',
                             'inscrito_id' => $atributos['id'],
                             'order_id' => 'FREE_'.random_int(1,999999),
                         ]);
-                        redirect('/');
-                        break;
+                        session()->flash('status', $status);
+                        session()->flash('atributos', $atributos);
+                        return redirect()->route('success');
                     case 'local':
-                            $local = Pagamento::create( [
-                                'status' => 'WAITING',
-                                'inscrito_id' => $atributos['id'],
-                                'order_id' => 'LOCAL_'.random_int(1,999999),
-                            ]);
-                            session()->flash('local', $local);
-                            session()->flash('atributos', $atributos);
-                            return redirect()->route('success');
+                        $status = Pagamento::create( [
+                            'status' => 'WAITING',
+                            'inscrito_id' => $atributos['id'],
+                            'order_id' => 'LOCAL_'.random_int(1,999999),
+                        ]);
+                        session()->flash('status', $status);
+                        session()->flash('atributos', $atributos);
+                        return redirect()->route('success');
                     case 'cartao_credito':
-                                Pagamento::create( [
-                                    'status' => 'IN_ANALYSIS',
-                                    'inscrito_id' => $atributos['id'],
-                                    'order_id' => 'CREDITO_'.random_int(1,999999),
-                                ]);
-                                redirect($link_credito);
-                                break;
+                        Pagamento::create( [
+                            'status' => 'IN_ANALYSIS',
+                            'inscrito_id' => $atributos['id'],
+                            'order_id' => 'CREDITO_'.random_int(1,999999),
+                        ]);
+                        redirect($link_credito);
+                        break;
                     case 'pix':
                         $qrcode = $this->qrcode($atributos,dadosform: $stateData);
                         $status = Pagamento::create( [
@@ -193,6 +194,8 @@ class CreateTicket extends Component implements HasForms
                             'order_id' => $qrcode['id'],
                         ]);
                         session()->flash('qrcode', $qrcode);
+                        session()->flash('status', $status);
+                        session()->flash('atributos', $atributos);
                         return redirect()->route('pix');
                     default:
                         redirect('/');

@@ -2,13 +2,10 @@
 
 namespace App\Livewire;
 
-use App\Models\Evento;
-use Filament\Notifications\Notification;
 use Livewire\Component;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
-use Livewire\Features\SupportTesting\Render;
 
 class ViewPix extends Component implements HasForms
 {
@@ -20,6 +17,8 @@ class ViewPix extends Component implements HasForms
     {
         // Carrega $qrcode da sessão e armazena em $data para uso na view
         $this->data['qrcode'] = session('qrcode');
+        $this->data['status'] = session('status');
+        $this->data['atributos'] = session('atributos');
     }
     public function form(Form $form): Form
     {
@@ -32,6 +31,14 @@ class ViewPix extends Component implements HasForms
     {
         redirect('/');
     }
+
+    public function success(): void
+    {
+        session()->flash('status',  $this->data['status']);
+        session()->flash('atributos',  $this->data['atributos']);
+        redirect('/success');
+    }
+
     
     public function render()
     {
