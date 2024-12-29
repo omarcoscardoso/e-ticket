@@ -56,7 +56,7 @@ class CreateTicket extends Component implements HasForms
                         // Define tipo_pagamento como isento
                         $set('tipo_pagamento', 'isento');
                     } else {
-                        $set('tipo_pagamento', 'pix');
+                        $set('tipo_pagamento', null);
                     }
                 }),
             TextInput::make('custo')
@@ -78,6 +78,7 @@ class CreateTicket extends Component implements HasForms
                 ->cpf(),
             PhoneNumber::make('celular')
                 // ->default('519928321'.random_int(10,99))
+                ->required()
                 ->mask('(99) 99999-9999'),
             Select::make('sexo')
                 ->required()
@@ -113,7 +114,7 @@ class CreateTicket extends Component implements HasForms
                             ->orderBy('nome')
                             
                 )
-                // ->default(1)
+                ->default(1)
                 ->required(),
             Select::make('tipo_pagamento')
                 ->required()
@@ -135,8 +136,7 @@ class CreateTicket extends Component implements HasForms
 
     public function create()
     {
-        $stateData = $this->form->getState();
-        
+        $stateData = $this->form->getState();    
         if (!isset($stateData['evento_id'])) {
             $stateData['evento_id'] = 1; // Define o valor padrão ou o desejado
         }
@@ -144,6 +144,7 @@ class CreateTicket extends Component implements HasForms
         $dados = Inscrito::query()
                     ->where('nome', '=', $stateData['nome'])
                     ->Where('celular', '=', $stateData['celular'])->first();
+
         switch ($dados) {
             case null:
                 $inscrito = Inscrito::create($stateData);
@@ -204,6 +205,17 @@ class CreateTicket extends Component implements HasForms
                 $this->mount();
                 break;
             default:
+                $link_credito = null;
+                if ($stateData['custo']) {
+                    switch ($stateData['custo']) {
+                        case 170:
+                            $link_credito = 'https://pag.ae/7_2sAxW4o';
+                            break;
+                        case 85:
+                            $link_credito = 'https://pag.ae/7_482MVCL';
+                            break;
+                    }
+                }
                 Notification::make()
                     ->title('NOME ou CELULAR já cadastrados')
                     ->warning()
@@ -211,14 +223,14 @@ class CreateTicket extends Component implements HasForms
                     ->persistent()
                     ->body('Se você ainda não fez o PAGAMENTO escolha uma opção abaixo.')
                     ->actions([
-                        Action::make('PIX')
-                            ->button()
-                            ->color('success')
-                            ->url('pix'),
+                        // Action::make('PIX')
+                        //     ->button()
+                        //     ->color('success')
+                        //     ->url('pix'),
                         Action::make('CREDITO')
                             ->button()
                             ->color('info')
-                            ->url('https://mpago.la/1UweKHr'),
+                            ->url($link_credito),
                     ])
                     ->send();
                 break;
