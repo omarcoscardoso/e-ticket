@@ -189,7 +189,6 @@ class CreateTicket extends Component implements HasForms
                         break;
                     case 'pix':
                         $qrcode = $this->qrcode($atributos,dadosform: $stateData);
-                        dd($qrcode);
                         $status = Pagamento::create( [
                             'status' => 'WAITING',
                             'inscrito_id' => $atributos['id'],
