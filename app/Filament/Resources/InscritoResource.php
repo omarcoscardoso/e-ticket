@@ -53,9 +53,11 @@ class InscritoResource extends Resource
                     ->required()
                     ->label('Data de Nascimento'),
                 PhoneNumber::make('celular')
-                    ->mask('(99) 99999-9999'),
+                    ->mask('(99) 99999-9999')
+                    ->required(),
                 Document::make('cpf')
-                    ->cpf(),
+                    ->cpf()
+                    ->required(),
                 Forms\Components\Select::make('sexo')
                     ->required()
                     ->options([
