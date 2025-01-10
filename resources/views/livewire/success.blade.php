@@ -3,6 +3,8 @@
         <h1 class="font-sans text-3xl md:text-4xl font-bold mb-6">
             Inscrição concluída!
         </h1>
+        {{ $tamanho_camiseta = isset($data['atributos']['tamanho_camiseta']) ? $data['atributos']['tamanho_camiseta'] : 'Não informado'  }}
+
         <!-- Div ajustada para centralizar o ícone SVG -->
         <div class="flex items-center justify-center w-full">
             <div class="w-20 h-20">
@@ -21,7 +23,7 @@
                 <span class="font-semibold">Nome:</span> {{$data['atributos']['nome']}}<br>
                 <span class="font-semibold">CPF:</span> {{$data['atributos']['cpf']}} <br>
                 <span class="font-semibold">Celular:</span> {{$data['atributos']['celular']}} <br>
-                <span class="font-semibold">Camiseta:</span> {{$data['atributos']['tamanho_camiseta']}} <br>
+                <span class="font-semibold">Camiseta:</span> {{ $tamanho_camiseta }} <br>
                 <span class="font-semibold">Tipo Pagamento:</span> {{$data['atributos']['tipo_pagamento']}} <br>
             </p>
             
@@ -34,7 +36,7 @@
                     "Nome: " . $data['atributos']['nome'] . "\n" .
                     "CPF: " . $data['atributos']['cpf'] . "\n" .
                     "Celular: " . $data['atributos']['celular'] . "\n" .
-                    "Camiseta: " . $data['atributos']['tamanho_camiseta'] . "\n" .
+                    "Camiseta: " . $tamanho_camiseta . "\n" .
                     "Tipo Pagamento: " . $data['atributos']['tipo_pagamento']
                 ) }}" 
                target="_blank" 

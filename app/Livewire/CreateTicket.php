@@ -91,18 +91,18 @@ class CreateTicket extends Component implements HasForms
                 ->required()
                 // ->default(true)
                 ->boolean(),
-            Select::make('tamanho_camiseta')
-                ->required()
-                // ->default('M')
-                ->options([
-                    'PP' => 'PP',
-                    'P' => 'P',
-                    'M' => 'M',
-                    'G' => 'G',
-                    'GG' => 'GG',
-                    'XG' => 'XG',
-                ])
-                ->placeholder('Selecione o tamanho'),     
+            // Select::make('tamanho_camiseta')
+            //     ->required()
+            //     // ->default('M')
+            //     ->options([
+            //         'PP' => 'PP',
+            //         'P' => 'P',
+            //         'M' => 'M',
+            //         'G' => 'G',
+            //         'GG' => 'GG',
+            //         'XG' => 'XG',
+            //     ])
+            //     ->placeholder('Selecione o tamanho'),     
             Select::make('igreja_id')
                 ->label('Igreja')
                 ->relationship(
