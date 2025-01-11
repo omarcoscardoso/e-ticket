@@ -7,6 +7,8 @@
         </h1>
         <div class="flex items-center"> 
             <p class="text-sm">
+                {{ date_default_timezone_set('America/Sao_Paulo') }}
+
                 {{ now()->format('d/m/Y H:i:s') }}
             </p>
         </div>

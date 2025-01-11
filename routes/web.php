@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\HomePixController;
 use App\Livewire\CreateTicket;
 use App\Livewire\ListTickets;
 use App\Livewire\Success;
@@ -15,11 +14,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', ViewIndex::class);
-
-Route::get('/ticket', CreateTicket::class);
-
-Route::get('/lista', ListTickets::class);
-
+Route::get('/ticket', CreateTicket::class)->name('ticket');
+Route::get('/lista', ListTickets::class)->name('lista');
 Route::get('/pix', ViewPix::class)->name('pix');
-
 Route::get('/success', Success::class)->name('success');

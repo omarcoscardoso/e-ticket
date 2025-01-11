@@ -8,8 +8,8 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class InscritosOverview extends BaseWidget
 {
-    protected static ?int $sort = 1;
-    protected int | string | array $columnSpan = 1;
+    protected static ?int $sort = 3;
+    protected int | string | array $columnSpan = 'full';
     
     protected function getStats(): array
     {
