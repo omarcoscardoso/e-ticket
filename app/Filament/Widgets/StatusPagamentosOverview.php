@@ -66,16 +66,16 @@ class StatusPagamentosOverview extends BaseWidget
             //     ->color('danger'),
 
             // Pagamentos aguardando ou isentos
-            // Stat::make('Aguardando', Pagamento::query()
-            //     ->whereIn('status', ['WAITING', 'IN_ANALYSIS'])->count())
-            //     ->description('Inscrições aguardando pagamento')
-            //     ->Color('warning'),
+            Stat::make('Aguardando', Pagamento::query()
+                ->whereIn('status', ['WAITING', 'IN_ANALYSIS'])->count())
+                ->description('Inscrições aguardando pagamento')
+                ->Color('warning'),
             
             // Pagamentos aguardando ou isentos
-            Stat::make('Isento', Pagamento::query()
-                ->whereIn('status', ['FREE'])->count())
-                ->description('Inscrições isentas')
-                ->Color('info'),
+            // Stat::make('Isento', Pagamento::query()
+            //     ->whereIn('status', ['FREE'])->count())
+            //     ->description('Inscrições isentas')
+            //     ->Color('info'),
                 
         ];
     }
