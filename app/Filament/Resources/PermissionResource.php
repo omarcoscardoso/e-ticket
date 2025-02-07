@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\IgrejaResource\Pages;
-use App\Filament\Resources\IgrejaResource\RelationManagers;
-use App\Models\Igreja;
+use App\Filament\Resources\PermissionResource\Pages;
+use App\Filament\Resources\PermissionResource\RelationManagers;
+use App\Models\Permission;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,20 +13,19 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class IgrejaResource extends Resource
+class PermissionResource extends Resource
 {
-    protected static ?string $model = Igreja::class;
-    protected static ?string $navigationGroup = 'Configuração';
-    protected static ?string $navigationIcon = 'bx-church';
+    protected static ?string $model = Permission::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nome')
+                Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Toggle::make('ativo')
-                    ->required(),
             ]);
     }
 
@@ -34,15 +33,15 @@ class IgrejaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nome')
+                Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\ToggleColumn::make('ativo'),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i:s')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('d/m/Y H:i:s')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -63,7 +62,7 @@ class IgrejaResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageIgrejas::route('/'),
+            'index' => Pages\ManagePermissions::route('/'),
         ];
     }
 }
