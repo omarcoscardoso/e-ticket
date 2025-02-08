@@ -7,10 +7,11 @@ use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable //implements FilamentUser
+class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -45,8 +46,8 @@ class User extends Authenticatable //implements FilamentUser
             'password' => 'hashed',
         ];
     }
-    // public function canAccessPanel(Panel $panel): bool
-    // {
-    //     return str_ends_with($this->email, '@renovada.app.br') && $this->hasVerifiedEmail();
-    // }
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->hasPermissionTo('access_painel');
+    }
 }
