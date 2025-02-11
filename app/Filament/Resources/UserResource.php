@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use Auth;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -17,10 +18,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
-    protected static ?string $navigationGroup = 'Configuração';
+    protected static ?string $navigationGroup = 'Permissões e Usuários';
     protected static ?string $navigationIcon = 'bx-user';
     public static function form(Form $form): Form
     {
+        // dd(auth()->user()->name);
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
@@ -42,15 +44,17 @@ class UserResource extends Resource
                     ->relationship(
                         'roles',
                         'name', 
-                        fn(Builder $query) => auth()->user()->hasRole('Admin') ? null : $query->where('name', '!=', 'Admin')
+                        fn(Builder $query) => auth()->user()->hasRole(['Admin', 'Manager']) ? null : $query->whereNotIn ('name', ['Admin', 'Manager'])
                     )
                     ->preload()
+                    ->disabled(fn (Builder $query) => auth()->user()->hasRole(['Admin', 'Manager']) ? false : true )
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => auth()->user()->hasRole(['Admin', 'Manager']) ? null : $query->where('name', '=', auth()->user()->name))
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nome')
