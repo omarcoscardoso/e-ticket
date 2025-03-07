@@ -13,6 +13,7 @@ class Role_has_permissionsSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('role_has_permissions')->truncate();
         DB::table('role_has_permissions')->insert([
             ['permission_id' => 1, 'role_id' => 1],
             ['permission_id' => 2, 'role_id' => 1],

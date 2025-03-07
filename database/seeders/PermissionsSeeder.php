@@ -13,6 +13,7 @@ class PermissionsSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('permissions')->truncate();
         DB::table('permissions')->insert([
             ['id' => '1', 'name' => 'access_painel', 'guard_name' =>'web'],
             ['id' => '2', 'name' => 'user_read', 'guard_name' =>'web'],
