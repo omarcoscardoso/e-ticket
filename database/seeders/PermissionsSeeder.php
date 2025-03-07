@@ -13,6 +13,7 @@ class PermissionsSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB::table('permissions')->truncate();
         DB::table('permissions')->insert([
             ['id' => '1', 'name' => 'access_painel', 'guard_name' =>'web'],
@@ -45,5 +46,6 @@ class PermissionsSeeder extends Seeder
             ['id' => '28', 'name' => 'inscrito_update', 'guard_name' =>'web'],
             ['id' => '29', 'name' => 'inscrito_delete', 'guard_name' =>'web']
         ]);
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }
