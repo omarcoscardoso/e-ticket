@@ -3,7 +3,7 @@
         <h1 class="font-sans text-3xl md:text-4xl font-bold mb-6">
             Inscrição concluída!
         </h1>
-        {{ $tamanho_camiseta = isset($data['atributos']['tamanho_camiseta']) ? $data['atributos']['tamanho_camiseta'] : 'Não informado'  }}
+        <!-- {{ $tamanho_camiseta = isset($data['atributos']['tamanho_camiseta']) ? $data['atributos']['tamanho_camiseta'] : 'Não informado'  }} -->
 
         <!-- Div ajustada para centralizar o ícone SVG -->
         <div class="flex items-center justify-center w-full">
@@ -17,13 +17,13 @@
         </div>
         <div class="mt-6">
             <p class="font-sans text-base md:text-lg text-gray-700 mb-4">
-                Você se inscreveu para o Retiro de Verão 2025! <br><br>
+                Você se inscreveu para o Retiro de Jovens 2025! <br><br>
                 <span class="font-semibold">Data:</span> {{$data['status']->getAttributes()['updated_at']}}<br>
                 <span class="font-semibold">Identificador:</span> {{$data['status']->getAttributes()['order_id']}}<br>
                 <span class="font-semibold">Nome:</span> {{$data['atributos']['nome']}}<br>
                 <span class="font-semibold">CPF:</span> {{$data['atributos']['cpf']}} <br>
                 <span class="font-semibold">Celular:</span> {{$data['atributos']['celular']}} <br>
-                <span class="font-semibold">Camiseta:</span> {{ $tamanho_camiseta }} <br>
+                <!-- <span class="font-semibold">Camiseta:</span> {{ $tamanho_camiseta }} <br> -->
                 <span class="font-semibold">Tipo Pagamento:</span> {{$data['atributos']['tipo_pagamento']}} <br>
             </p>
             
@@ -36,7 +36,6 @@
                     "Nome: " . $data['atributos']['nome'] . "\n" .
                     "CPF: " . $data['atributos']['cpf'] . "\n" .
                     "Celular: " . $data['atributos']['celular'] . "\n" .
-                    "Camiseta: " . $tamanho_camiseta . "\n" .
                     "Tipo Pagamento: " . $data['atributos']['tipo_pagamento']
                 ) }}" 
                target="_blank" 
@@ -45,13 +44,13 @@
             </a>
             <br><br><br>
             <a 
-               href="/ticket" 
+               href="/jovem" 
                target="_self" 
                class="px-4 py-2 bg-blue-500 text-white rounded-lg">
                Nova inscrição
             </a>
         </div>
-        <p class="mt-4 text-sm text-teal-700 font-medium">@iprviamao</p>
+        <p class="mt-4 text-sm text-teal-700 font-medium">@presbiteriocatarinense</p>
     </div>
 </div>
 
