@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Blade;
 use Livewire\Component;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class ListTickets extends Component implements HasForms, HasTable
+class RelatorioTickets extends Component implements HasForms, HasTable
 {
     use InteractsWithTable;
     use InteractsWithForms;
@@ -111,6 +111,6 @@ class ListTickets extends Component implements HasForms, HasTable
 
     public function render()
     {
-        return view('livewire.list-tickets');
+        return view('livewire.relatorio-tickets');
     }
 }

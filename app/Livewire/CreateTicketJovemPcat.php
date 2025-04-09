@@ -26,11 +26,29 @@ class CreateTicketJovemPcat extends Component implements HasForms
     use InteractsWithForms;
 
     public ?array $data = [];
-    
+    public $inscricaoEventoId;
+    public $inscricaoCpf;
+
     public function form(Form $form): Form
     {
         return $form
         ->schema([
+            Document::make('cpf')
+            ->label('CPF')
+            // ->default(99982013068)
+            ->required()
+            ->cpf()
+            ->live(true)
+            ->afterStateUpdated(function ( Get $get, $set, $state ) {
+                $inscricao = Inscrito::query()
+                    ->where('evento_id', $get('evento_id'))
+                    ->where('cpf', '=', $state)->first();
+                if ($inscricao) {
+                    $this->inscricaoCpf = $inscricao->cpf;
+                    $this->inscricaoEventoId = $inscricao->evento_id;
+                    $this->notification();
+                }
+            }),
             Select::make('evento_id')
                 ->label('Evento')
                 ->relationship('evento','nome_evento')
@@ -53,7 +71,6 @@ class CreateTicketJovemPcat extends Component implements HasForms
                     $ingresso = Ingresso::find($state);
                     $set('custo', $ingresso ? $ingresso->custo : null);
                     if ($ingresso && $ingresso->custo == 0) {
-                        // Define tipo_pagamento como isento
                         $set('tipo_pagamento', 'isento');
                     } else {
                         $set('tipo_pagamento', null);
@@ -71,11 +88,6 @@ class CreateTicketJovemPcat extends Component implements HasForms
                 ->label('Data de Nascimento')
                 // ->default(1982)
                 ->required(),
-            Document::make('cpf')
-                ->label('CPF')
-                // ->default(99982013068)
-                ->required()
-                ->cpf(),
             PhoneNumber::make('celular')
                 // ->default('519928321'.random_int(10,99))
                 ->required()
@@ -188,7 +200,7 @@ class CreateTicketJovemPcat extends Component implements HasForms
                         redirect($link_credito);
                         break;
                     case 'pix':
-                        $qrcode = $this->qrcode($atributos,dadosform: $stateData);
+                        $qrcode = $this->qrcode($atributos, $stateData);
                         $status = Pagamento::create( [
                             'status' => 'WAITING',
                             'inscrito_id' => $atributos['id'],
@@ -205,36 +217,34 @@ class CreateTicketJovemPcat extends Component implements HasForms
                 $this->mount();
                 break;
             default:
-                $link_credito = null;
-                if ($stateData['custo']) {
-                    switch ($stateData['custo']) {
-                        case 180.0:
-                            $link_credito = 'https://pag.ae/7_rQhm14t';
-                            break;
-                        case 85:
-                            $link_credito = '';
-                            break;
-                    }
-                }
-                Notification::make()
-                    ->title('NOME ou CELULAR já cadastrados')
-                    ->warning()
-                    ->color('warning')
-                    ->persistent()
-                    ->body('Se você ainda não fez o PAGAMENTO escolha uma opção abaixo.')
-                    ->actions([
-                        // Action::make('PIX')
-                        //     ->button()
-                        //     ->color('success')
-                        //     ->url('pix'),
-                        Action::make('CREDITO')
-                            ->button()
-                            ->color('info')
-                            ->url($link_credito),
-                    ])
-                    ->send();
+                $this->notification();
                 break;
         }
+    }
+
+    public function notification()
+    {
+        Notification::make()
+            ->title('CPF já cadastrado')
+            ->warning()
+            ->icon('heroicon-o-ticket')
+            ->color('warning')
+            ->persistent()
+            ->body('Já exitem Tickets para esse CPF')
+            ->actions([
+                Action::make('Novo Ingresso')
+                     ->button()
+                     ->color('success')
+                     ->close(),
+                Action::make('Ver Tickets')
+                    ->button()
+                    ->color('info')
+                    ->url(route('lsticket', [
+                        'inscricaoEventoId' => $this->inscricaoEventoId,
+                        'inscricaoCpf' => $this->inscricaoCpf,
+                    ])),
+            ])
+            ->send();
     }
 
     static function qrcode($atributos, $dadosform)

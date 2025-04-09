@@ -114,6 +114,9 @@ class InscritoResource extends Resource
                         return $record?->pagamento?->status;
                     })                    
                     ->placeholder('Selecione o status'),
+                
+                Forms\Components\Textarea::make('observacao'),
+                    
                     
             ])->columns(4);
     }
@@ -127,22 +130,28 @@ class InscritoResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('evento.id')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('evento.nome_evento')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('ingresso.nome')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('ingresso.custo')
                     ->label('Valor')
                     ->prefix('R$ ')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('nome')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('cpf')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('endereco')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -154,11 +163,13 @@ class InscritoResource extends Resource
                     ->searchable(),   
                 Tables\Columns\TextColumn::make('sexo')
                     ->searchable()
-                    ->sortable(),               
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),               
                 Tables\Columns\IconColumn::make('batizado')
                     ->searchable()
                     ->boolean()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('igreja.nome')
                     ->searchable()
                     ->sortable()
@@ -177,7 +188,8 @@ class InscritoResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tamanho_camiseta')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\BadgeColumn::make('pagamento.status')
                     ->label('Status')    
                     ->colors([
@@ -217,6 +229,8 @@ class InscritoResource extends Resource
                 // Tables\Filters\Filter::make('observacao')
                 //     ->label("InChurch")
                 //     ->query(fn (Builder $query): Builder => $query->where('observacao', '=', "inchurch")),
+                Tables\Filters\Filter::make('Acamp Jovem')
+                    ->query(fn (Builder $query): Builder => $query->where('inscritos.evento_id', '=', 2)),
                 Tables\Filters\Filter::make('inscritos.batizado')
                     ->form([
                         Checkbox::make('Batizados'),

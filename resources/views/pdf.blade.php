@@ -39,7 +39,7 @@
             <!-- <th>Sexo</th> -->
             <!-- <th>Batizado</th> -->
             <!-- <th>Igreja</th> -->
-            <th>Camiseta</th>
+            <!-- <th>Camiseta</th> -->
             <th>Pagamento</th>
             <th>Status</th>
             <!-- <th>Obs</th> -->
@@ -57,7 +57,7 @@
                 <td>{{ $record->celular }}</td>
                 <!-- <td>{{ $record->batizado }}</td> -->
                 <!-- <td>{{ $record->igreja }}</td> -->
-                <td>{{ $record->tamanho_camiseta }}</td>
+                <!-- <td>{{ $record->tamanho_camiseta }}</td> -->
                 <td>{{ $record->tipo_pagamento }}</td>
                 <td>{{ $record->status_pagamento }}</td>
                 <!-- <td>{{ $record->observacao }}</td> -->
