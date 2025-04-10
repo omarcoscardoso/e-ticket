@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Evento;
+use App\Models\Pagamento;
 
 class PixService
 {
@@ -88,7 +89,7 @@ class PixService
           var_dump($error);
           die();
         }
-        
+
         $data = json_decode($response, true);
         
         // dd($data);

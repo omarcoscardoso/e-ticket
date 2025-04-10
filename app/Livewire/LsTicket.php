@@ -90,9 +90,9 @@ class LsTicket extends Component implements HasForms, HasTable
 
                         Pagamento::where('inscrito_id', $atributos->id)
                             ->update([
-                                'status' => 'WAITING',
+                                'status' => 'WAITING', 
                                 'order_id' => $qrcode['id'],
-                        ]);
+                            ]);
                         $status = Pagamento::where('inscrito_id', $atributos->id)->first();
                      
                         Session::flash('qrcode', $qrcode);
@@ -113,7 +113,7 @@ class LsTicket extends Component implements HasForms, HasTable
                                 'status' => 'IN_ANALYSIS',
                                 'inscrito_id' => $record['id'],
                                 'order_id' => 'CREDITO_'.random_int(1,999999),
-                        ]);
+                            ]);
                         if ($ingresso && $ingresso->custo) {
                             switch ($ingresso->custo) {
                                 case 180.0:

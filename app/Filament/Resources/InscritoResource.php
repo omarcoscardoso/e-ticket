@@ -81,7 +81,6 @@ class InscritoResource extends Resource
                     ->preload()
                     ->required(),
                 Forms\Components\Select::make('tamanho_camiseta')
-                    ->required()
                     ->options([
                         'PP' => 'PP',
                         'P' => 'P',
