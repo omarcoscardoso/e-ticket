@@ -17,6 +17,9 @@ class StatusPagamentosOverview extends BaseWidget
     protected function getStats(): array
     {
         $sinal = '0';
+        $ingresso = 180;
+        $taxa = 3.40;
+
         
         $data_pagar = Inscrito::join('ingressos', 'inscritos.ingresso_id', '=', 'ingressos.id')
         ->select('ingressos.nome', DB::raw('count(inscritos.id) as count'))
@@ -24,18 +27,19 @@ class StatusPagamentosOverview extends BaseWidget
         ->groupBy('ingressos.nome')
         ->pluck('count', 'nome');
 
-        $pagar_adulto = $data_pagar->get('Inteira')*180;
+        $inteira = $data_pagar->get('Inteira')*($ingresso);
+        $total_recebido = $data_pagar->get('Inteira')*($ingresso-$taxa);
         // $pagar_criança = $data_pagar->get('Criança (8 à 12)')*55;
         // $pagar_isento = $data_pagar->get('Criança até 7 anos');
 
         return [
-            Stat::make('Total Recebido (R$)', number_format($pagar_adulto,2,",","."))
-                ->description('Total de inscritos - Entrada')
+            Stat::make('Total Recebido (R$)', number_format($total_recebido,2,",","."))
+                ->description('Inscritos - taxa')
                 ->descriptionIcon('heroicon-c-currency-dollar')
                 // ->chart([7, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
-                ->color('danger'),
+                ->color('success'),
 
-            Stat::make('Ing. Inteira (R$)', number_format($pagar_adulto,2,",","."))
+            Stat::make('Inscritos (R$)', number_format($inteira,2,",","."))
                 ->description(' ')
                 ->descriptionIcon('heroicon-c-user')
                 ->color('danger'),
@@ -45,10 +49,10 @@ class StatusPagamentosOverview extends BaseWidget
             //     ->descriptionIcon('heroicon-c-users')
             //     ->color('danger'),
 
-            Stat::make('Entrada (R$)', number_format($sinal,2,",","."))
-                ->description('Sinal para Evento')
+            Stat::make('Taxa PagBank (R$)', number_format($taxa,2,",","."))
+                ->description('Taxa PagBank p/ transação')
                 ->descriptionIcon('heroicon-m-currency-dollar')
-                ->color('success'),                
+                ->color('danger'),                
             // Pagamentos realizados
             Stat::make('Pagamentos', Pagamento::query()->where('status', '=', 'PAID')->count())
                 ->description('Pagamentos registrados')

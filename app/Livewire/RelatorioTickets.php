@@ -31,8 +31,10 @@ class RelatorioTickets extends Component implements HasForms, HasTable
 
     public function table(Table $table): Table
     {
+        // dd(Inscrito::query()->where('evento_id', '=', 2)->get());
         return $table
-            ->query(Inscrito::query()->where('evento_id', '=', 2))
+            ->query(Inscrito::query()
+                ->where('evento_id', '=', 2))
             ->columns([
                 TextColumn::make('id_inscrito')
                     ->searchable()
