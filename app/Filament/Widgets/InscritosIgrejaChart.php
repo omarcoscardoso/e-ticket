@@ -17,6 +17,7 @@ class InscritosIgrejaChart extends ChartWidget
 
         $data = Inscrito::join('igrejas', 'inscritos.igreja_id', '=', 'igrejas.id')
         ->select('igrejas.nome as igreja', DB::raw('count(inscritos.id) as count'))
+        ->where('evento_id', '=', 2)
         ->groupBy('igrejas.nome')
         ->orderBy('igrejas.nome')
         ->pluck('count', 'igreja')

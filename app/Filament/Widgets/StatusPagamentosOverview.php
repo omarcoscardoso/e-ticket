@@ -16,33 +16,34 @@ class StatusPagamentosOverview extends BaseWidget
 
     protected function getStats(): array
     {
-        $sinal = '1000';
+        $sinal = '0';
         
         $data_pagar = Inscrito::join('ingressos', 'inscritos.ingresso_id', '=', 'ingressos.id')
         ->select('ingressos.nome', DB::raw('count(inscritos.id) as count'))
+        ->where('inscritos.evento_id', '=', 2)
         ->groupBy('ingressos.nome')
         ->pluck('count', 'nome');
-        
-        $pagar_adulto = $data_pagar->get('Adulto')*110;
-        $pagar_criança = $data_pagar->get('Criança (8 à 12)')*55;
+
+        $pagar_adulto = $data_pagar->get('Inteira')*180;
+        // $pagar_criança = $data_pagar->get('Criança (8 à 12)')*55;
         // $pagar_isento = $data_pagar->get('Criança até 7 anos');
 
         return [
-            Stat::make('Total a pagar (R$)', number_format($pagar_adulto+$pagar_criança-$sinal,2,",","."))
+            Stat::make('Total Recebido (R$)', number_format($pagar_adulto,2,",","."))
                 ->description('Total de inscritos - Entrada')
                 ->descriptionIcon('heroicon-c-currency-dollar')
-                ->chart([7, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+                // ->chart([7, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
                 ->color('danger'),
 
-            Stat::make('Ing. Adulto (R$)', number_format($pagar_adulto,2,",","."))
+            Stat::make('Ing. Inteira (R$)', number_format($pagar_adulto,2,",","."))
                 ->description(' ')
                 ->descriptionIcon('heroicon-c-user')
                 ->color('danger'),
 
-            Stat::make('Ing. Criança (R$)', number_format($pagar_criança,2,",","."))
-                ->description(' ')
-                ->descriptionIcon('heroicon-c-users')
-                ->color('danger'),
+            // Stat::make('Ing. Criança (R$)', number_format($pagar_criança,2,",","."))
+            //     ->description(' ')
+            //     ->descriptionIcon('heroicon-c-users')
+            //     ->color('danger'),
 
             Stat::make('Entrada (R$)', number_format($sinal,2,",","."))
                 ->description('Sinal para Evento')
