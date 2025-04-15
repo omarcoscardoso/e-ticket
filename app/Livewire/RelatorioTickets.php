@@ -34,10 +34,10 @@ class RelatorioTickets extends Component implements HasForms, HasTable
         // dd(Inscrito::query()->where('evento_id', '=', 2)->get());
         return $table
             ->query(Inscrito::query()
-                ->where('evento_id', '=', 2))
+                ->where('evento_id', '=', 2)
+                ->with(['pagamento', 'igreja']))
             ->columns([
                 TextColumn::make('id_inscrito')
-                    ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('nome')
