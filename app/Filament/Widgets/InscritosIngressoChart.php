@@ -1,12 +1,15 @@
 <?php
-
+/**
+ * 
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\DB;
+use function PHPUnit\Framework\returnArgument;
 
 class InscritosIngressoChart extends ChartWidget
 {
+    protected static bool $visible = false;
     protected static ?string $heading = 'Inscritos p/ Ticket';
     protected static ?int $sort = 2;
     protected int | string | array $columnSpan = 1;
@@ -35,9 +38,11 @@ class InscritosIngressoChart extends ChartWidget
             ],
             'labels' => array_keys($data),
         ];
+
     }
     protected function getType(): string
     {
         return 'bar';
     }
 }
+*/

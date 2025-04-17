@@ -23,6 +23,16 @@
             </div>
         </x-zeus-accordion::accordion.item>
         
+        <x-zeus-accordion::accordion.item
+                :isIsolated="true"
+                :label="__('Inscritos p/ Idade')"
+                icon="bx-timer"
+        >
+            <div class="bg-white p-4 *:py-2">
+                @livewire(\App\Filament\Widgets\InscritosIdadeChart::class)        
+            </div>
+        </x-zeus-accordion::accordion.item>
+
     </x-zeus-accordion::accordion>
    
 </div>

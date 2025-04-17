@@ -33,16 +33,16 @@ class StatusPagamentosOverview extends BaseWidget
         // $pagar_isento = $data_pagar->get('Criança até 7 anos');
 
         return [
-            Stat::make('Total Recebido (R$)', number_format($total_recebido,2,",","."))
-                ->description('Inscritos - taxa')
-                ->descriptionIcon('heroicon-c-currency-dollar')
-                // ->chart([7, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
-                ->color('success'),
+            // Stat::make('Total Recebido (R$)', number_format($total_recebido,2,",","."))
+            //     ->description('Inscritos - taxa')
+            //     ->descriptionIcon('heroicon-c-currency-dollar')
+            //     // ->chart([7, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+            //     ->color('success'),
 
-            Stat::make('Inscritos (R$)', number_format($inteira,2,",","."))
-                ->description(' ')
-                ->descriptionIcon('heroicon-c-user')
-                ->color('danger'),
+            // Stat::make('Inscritos (R$)', number_format($inteira,2,",","."))
+            //     ->description(' ')
+            //     ->descriptionIcon('heroicon-c-user')
+            //     ->color('danger'),
 
             // Stat::make('Ing. Criança (R$)', number_format($pagar_criança,2,",","."))
             //     ->description(' ')
