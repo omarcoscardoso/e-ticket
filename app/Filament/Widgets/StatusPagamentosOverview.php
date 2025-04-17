@@ -54,13 +54,21 @@ class StatusPagamentosOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-currency-dollar')
                 ->color('danger'),                
             // Pagamentos realizados
-            Stat::make('Pagamentos', Pagamento::query()->where('status', '=', 'PAID')->count())
+            Stat::make('Pagamentos', 
+                Pagamento::query()
+                    ->where('status', '=', 'PAID')
+                    ->where('evento_id', '=', 2)
+                    ->count())
                 ->description('Pagamentos registrados')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success'),
 
             // Pagamentos em análise
-            Stat::make('Em Análise', Pagamento::query()->where('status', '=', 'IN_ANALYSIS')->count())
+            Stat::make('Em Análise', 
+                Pagamento::query()
+                    ->where('status', '=', 'IN_ANALYSIS')
+                    ->where('evento_id', '=', 2)
+                    ->count())
                 ->description('Pagamentos aguardando confirmação')
                 ->color('warning'),
 
