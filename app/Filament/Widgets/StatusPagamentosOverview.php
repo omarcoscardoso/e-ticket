@@ -83,7 +83,7 @@ class StatusPagamentosOverview extends BaseWidget
             // Pagamentos aguardando ou isentos
             Stat::make('Aguardando', 
                 Pagamento::query()
-                    ->whereIn('status', ['WAITING', 'IN_ANALYSIS'])
+                    ->whereIn('status', ['WAITING'])
                     ->join('inscritos', 'pagamentos.inscrito_id', '=', 'inscritos.id')
                     ->where('inscritos.evento_id', '=', 2)
                     ->count())
