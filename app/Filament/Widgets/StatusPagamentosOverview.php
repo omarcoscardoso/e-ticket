@@ -57,7 +57,8 @@ class StatusPagamentosOverview extends BaseWidget
             Stat::make('Pagamentos', 
                 Pagamento::query()
                     ->where('status', '=', 'PAID')
-                    ->where('evento_id', '=', 2)
+                    ->join('inscritos', 'pagamentos.inscrito_id', '=', 'inscritos.id')
+                    ->where('inscritos.evento_id', '=', 2)
                     ->count())
                 ->description('Pagamentos registrados')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
@@ -67,7 +68,8 @@ class StatusPagamentosOverview extends BaseWidget
             Stat::make('Em Análise', 
                 Pagamento::query()
                     ->where('status', '=', 'IN_ANALYSIS')
-                    ->where('evento_id', '=', 2)
+                    ->join('inscritos', 'pagamentos.inscrito_id', '=', 'inscritos.id')
+                    ->where('inscritos.evento_id', '=', 2)
                     ->count())
                 ->description('Pagamentos aguardando confirmação')
                 ->color('warning'),
@@ -79,8 +81,12 @@ class StatusPagamentosOverview extends BaseWidget
             //     ->color('danger'),
 
             // Pagamentos aguardando ou isentos
-            Stat::make('Aguardando', Pagamento::query()
-                ->whereIn('status', ['WAITING', 'IN_ANALYSIS'])->count())
+            Stat::make('Aguardando', 
+                Pagamento::query()
+                    ->whereIn('status', ['WAITING', 'IN_ANALYSIS'])
+                    ->join('inscritos', 'pagamentos.inscrito_id', '=', 'inscritos.id')
+                    ->where('inscritos.evento_id', '=', 2)
+                    ->count())
                 ->description('Inscrições aguardando pagamento')
                 ->Color('warning'),
             
