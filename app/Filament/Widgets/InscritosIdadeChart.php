@@ -24,6 +24,7 @@ class InscritosIdadeChart extends ChartWidget
                 ELSE "Não informada"
             END AS faixa_etaria, COUNT(*) AS quantidade'
         )
+        ->where('evento_id', '=', 2)
         ->groupBy('faixa_etaria')
         ->orderBy('faixa_etaria') // Opcional: ordenar as faixas etárias
         ->pluck('quantidade', 'faixa_etaria')
